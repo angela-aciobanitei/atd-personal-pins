@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.ang.acb.personalpins.data.entitiy.Comment;
-import com.ang.acb.personalpins.data.entitiy.Pin;
-import com.ang.acb.personalpins.data.entitiy.Tag;
+import com.ang.acb.personalpins.data.entity.Comment;
+import com.ang.acb.personalpins.data.entity.Pin;
+import com.ang.acb.personalpins.data.entity.Tag;
 import com.ang.acb.personalpins.data.repository.PinRepository;
 import com.ang.acb.personalpins.utils.AbsentLiveData;
 
@@ -74,5 +74,13 @@ public class PinsViewModel extends ViewModel {
             });
         }
         return  pinComments;
+    }
+
+    public void createTag(long pinId, String tag) {
+        pinRepository.insertTag(new Tag(pinId, tag));
+    }
+
+    public void createComment(long pinId, String comment) {
+        pinRepository.insertComment(new Comment(pinId, comment));
     }
 }

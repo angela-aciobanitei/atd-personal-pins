@@ -7,9 +7,9 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.ang.acb.personalpins.data.entitiy.Board;
-import com.ang.acb.personalpins.data.entitiy.BoardPin;
-import com.ang.acb.personalpins.data.entitiy.Pin;
+import com.ang.acb.personalpins.data.entity.Board;
+import com.ang.acb.personalpins.data.entity.BoardPin;
+import com.ang.acb.personalpins.data.entity.Pin;
 
 import java.util.List;
 

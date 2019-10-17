@@ -8,11 +8,11 @@ import com.ang.acb.personalpins.data.dao.BoardPinDao;
 import com.ang.acb.personalpins.data.dao.CommentDao;
 import com.ang.acb.personalpins.data.dao.PinDao;
 import com.ang.acb.personalpins.data.dao.TagDao;
-import com.ang.acb.personalpins.data.entitiy.Board;
-import com.ang.acb.personalpins.data.entitiy.BoardPin;
-import com.ang.acb.personalpins.data.entitiy.Comment;
-import com.ang.acb.personalpins.data.entitiy.Pin;
-import com.ang.acb.personalpins.data.entitiy.Tag;
+import com.ang.acb.personalpins.data.entity.Board;
+import com.ang.acb.personalpins.data.entity.BoardPin;
+import com.ang.acb.personalpins.data.entity.Comment;
+import com.ang.acb.personalpins.data.entity.Pin;
+import com.ang.acb.personalpins.data.entity.Tag;
 
 /**
  * The Room database for this app.

@@ -7,7 +7,7 @@
     <data>
         <variable
             name="pin"
-            type="com.ang.acb.personalpins.data.entitiy.Pin" />
+            type="com.ang.acb.personalpins.data.entity.Pin" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

@@ -8,7 +8,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
-import com.ang.acb.personalpins.data.entitiy.Comment;
+import com.ang.acb.personalpins.data.entity.Comment;
 
 import java.util.List;
 

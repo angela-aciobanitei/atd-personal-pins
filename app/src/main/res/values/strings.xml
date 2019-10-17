@@ -3,26 +3,31 @@
 
     <string name="picture">Picture</string>
     <string name="description_info">Info</string>
-    <string name="request_permission">This sample needs camera permission.</string>
+    <string name="request_permission">This app needs camera permission.</string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
-    <string name="intro_message">
-        <![CDATA[
-            This sample demonstrates the basic use of Camera2 API. Check the source code to see how
-            you can display camera preview and take pictures.
-        ]]>
-    </string>
     <string name="record">Record</string>
     <string name="stop">Stop</string>
-    <string name="permission_request">This sample needs permission for camera and audio recording.</string>
+    <string name="permission_request">This app needs permission for camera and audio recording.</string>
 
     <!-- Used for Navigation -->
     <string name="boards">Boards</string>
     <string name="pins">Pins</string>
     <string name="take_photo">New Photo</string>
     <string name="record_video">New Video</string>
+
     <string name="new_board">NEW BOARD</string>
     <string name="board_name">Board name</string>
     <string name="dialog_pos_button">OK</string>
-    <string name="dialog_neg_button">CANCEL</string>
+    <string name="dialog_neg_button">Cancel</string>
     <string name="board_cover">Board Default Cover</string>
+    <string name="no_board_pins">No pins for this board yet</string>
+    <string name="no_boards">No boards created yet</string>
+    <string name="no_pins">No pins created yet</string>
+    <string name="pin_details_photo">Pin Details Photo</string>
+    <string name="pin_details_tags_label">Tags</string>
+    <string name="pin_details_comments_label">Comments</string>
+    <string name="new_tag">NEW TAG</string>
+    <string name="new_comment">NEW COMMENT</string>
+    <string name="tag_name">Tag name</string>
+    <string name="comment_text">Comment Text</string>
 </resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="tag"
+            type="com.ang.acb.personalpins.data.entity.Tag" />
+    </data>
+
+    <TextView
+        android:id="@+id/tag_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@{tag.tagText}"
+        android:drawableStart="@drawable/ic_label_black_24dp"
+        android:drawableTint="@color/colorAccent"
+        android:drawablePadding="8dp"
+        tools:text="@tools:sample/lorem"/>
+</layout>

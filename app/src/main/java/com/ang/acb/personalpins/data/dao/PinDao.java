@@ -9,7 +9,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 
 
-import com.ang.acb.personalpins.data.entitiy.Pin;
+import com.ang.acb.personalpins.data.entity.Pin;
 
 import java.util.List;
 

@@ -1,9 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.pins.PinDetailsFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-</FrameLayout>
+    <data>
+        <import type="com.ang.acb.personalpins.data.entity.Pin" />
+
+        <variable name="pin" type="Pin" />
+        <variable name="tagsCount" type="int"/>
+        <variable name="commentsCount" type="int"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/pin_details_video_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="16:9"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/barrier1"/>
+
+        <ImageView
+            android:id="@+id/pin_details_photo"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:contentDescription="@string/pin_details_photo"
+            app:layout_constraintDimensionRatio="16:9"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/barrier1" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="pin_details_video_container,pin_details_photo" />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/video_details_nested_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="?attr/actionBarSize"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/barrier1"
+            app:toggleVisibility="@{pin != null}">
+
+            <include
+                android:id="@+id/pin_partial_info"
+                layout="@layout/pin_details_partial_info"
+                app:pin="@{pin}"
+                app:tagsCount="@{tagsCount}"
+                app:commentsCount="@{commentsCount}"/>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,4 +1,4 @@
-package com.ang.acb.personalpins.data.entitiy;
+package com.ang.acb.personalpins.data.entity;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

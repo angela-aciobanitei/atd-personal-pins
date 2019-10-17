@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ang.acb.personalpins.data.entitiy.Pin;
+import com.ang.acb.personalpins.data.entity.Pin;
 import com.ang.acb.personalpins.databinding.PinItemBinding;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public class PinsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<Pin> pins;
     private PinClickCallback clickCallback;
 
-    PinsAdapter(PinClickCallback clickCallback) {
+    public PinsAdapter(PinClickCallback clickCallback) {
         this.clickCallback = clickCallback;
     }
 

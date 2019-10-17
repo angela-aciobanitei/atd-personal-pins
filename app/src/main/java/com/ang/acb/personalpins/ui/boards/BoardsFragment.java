@@ -10,28 +10,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.ang.acb.personalpins.R;
-import com.ang.acb.personalpins.data.entitiy.Board;
+import com.ang.acb.personalpins.data.entity.Board;
 import com.ang.acb.personalpins.databinding.FragmentBoardsBinding;
 import com.ang.acb.personalpins.ui.common.MainActivity;
 import com.ang.acb.personalpins.utils.GridMarginDecoration;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -39,7 +36,7 @@ import dagger.android.support.AndroidSupportInjection;
 
 public class BoardsFragment extends Fragment {
 
-    private static final String ARG_BOARD_ID = "ARG_BOARD_ID";
+    public static final String ARG_BOARD_ID = "ARG_BOARD_ID";
 
     private FragmentBoardsBinding binding;
     private BoardsAdapter boardsAdapter;
@@ -85,11 +82,10 @@ public class BoardsFragment extends Fragment {
 
     private void initAdapter() {
         boardsAdapter = new BoardsAdapter(this::onBoardClick);
-        RecyclerView recyclerView = binding.rvBoards;
         binding.rvBoards.setAdapter(boardsAdapter);
         binding.rvBoards.setLayoutManager(new GridLayoutManager(
                 getHostActivity(), getResources().getInteger(R.integer.span_count)));
-        recyclerView.addItemDecoration(new GridMarginDecoration(
+        binding.rvBoards.addItemDecoration(new GridMarginDecoration(
                 getHostActivity(), R.dimen.item_offset));
 
     }
@@ -104,9 +100,13 @@ public class BoardsFragment extends Fragment {
 
     private void populateUi() {
         boardsViewModel.getAllBoards().observe(getViewLifecycleOwner(), boards -> {
-            if(boards != null) {
-                boardsAdapter.submitList(boards);
-            }
+            int boardsCount = (boards == null) ? 0 : boards.size();
+            binding.setBoardsCount(boardsCount);
+
+            if(boardsCount != 0) boardsAdapter.submitList(boards);
+            else binding.boardsEmptyState.setText(R.string.no_boards);
+
+            binding.executePendingBindings();
         });
     }
 
@@ -117,21 +117,25 @@ public class BoardsFragment extends Fragment {
 
     }
 
-    public void createNewBoardDialog() {
+    private void createNewBoardDialog() {
         MainActivity activity = getHostActivity();
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
         View dialogView = activity.getLayoutInflater()
-                .inflate(R.layout.create_new_board_dialog, null);
+                .inflate(R.layout.create_new_dialog, null);
         dialogBuilder.setView(dialogView);
+
+        // Set title
+        TextView title = dialogView.findViewById(R.id.dialog_title);
+        title.setText(R.string.new_board);
 
         // Setup dialog buttons
         final EditText editText = dialogView.findViewById(R.id.dialog_edit_text);
+        editText.setHint(R.string.board_name);
         dialogBuilder.setPositiveButton(R.string.dialog_pos_button, (dialog, whichButton) -> {
             String input = editText.getText().toString();
             if (input.trim().length() != 0) boardsViewModel.createBoard(input);
             else dialog.dismiss();
         });
-
         dialogBuilder.setNegativeButton(R.string.dialog_neg_button, (dialog, whichButton) ->
                 dialog.cancel());
 

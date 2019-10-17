@@ -15,7 +15,7 @@
         <action
             android:id="@+id/action_board_list_to_board_details"
             app:destination="@id/board_details"
-            app:popUpTo="@string/boards">
+            app:popUpTo="@+id/boards">
             <argument
                 android:name="boardId"
                 app:argType="long" />
@@ -26,6 +26,14 @@
         android:id="@+id/board_details"
         android:name="com.ang.acb.personalpins.ui.boards.BoardDetailsFragment"
         tools:layout="@layout/fragment_board_details">
+        <action
+            android:id="@+id/action_board_details_to_pin_details"
+            app:destination="@id/pin_details"
+            app:popUpTo="@+id/board_details">
+            <argument
+                android:name="pinId"
+                app:argType="long" />
+        </action>
     </fragment>
 
     <!-- Navigate from pin list to pin details (and back/up) -->
@@ -37,7 +45,7 @@
         <action
             android:id="@+id/action_pin_list_to_pin_details"
             app:destination="@id/pin_details"
-            app:popUpTo="@string/pins">
+            app:popUpTo="@+id/pins">
             <argument
                 android:name="pinId"
                 app:argType="long" />

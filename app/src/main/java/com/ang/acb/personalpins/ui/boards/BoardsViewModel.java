@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.ang.acb.personalpins.data.entitiy.Board;
-import com.ang.acb.personalpins.data.entitiy.Pin;
+import com.ang.acb.personalpins.data.entity.Board;
+import com.ang.acb.personalpins.data.entity.Pin;
 import com.ang.acb.personalpins.data.repository.BoardRepository;
 import com.ang.acb.personalpins.utils.AbsentLiveData;
 
@@ -65,7 +65,8 @@ public class BoardsViewModel extends ViewModel {
     }
 
     public void createBoard(String title) {
-        boardRepository.insertBoard(new Board(title, " "));
+        // Set default board image with fixed image.
+        // https://stackoverflow.com/questions/4896223/how-to-get-an-uri-of-an-image-resource-in-android/38340580
+        boardRepository.insertBoard(new Board(title, ("android.resource://com.ang.acb.personalpins/R.drawable.ic_dashboard_24dp")));
     }
-
 }

@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ang.acb.personalpins.data.entitiy.Board;
+import com.ang.acb.personalpins.data.entity.Board;
 import com.ang.acb.personalpins.databinding.BoardItemBinding;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public class BoardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private List<Board> boards;
     private BoardClickCallback clickCallback;
 
-    BoardsAdapter(BoardClickCallback clickCallback) {
+    public BoardsAdapter(BoardClickCallback clickCallback) {
         this.clickCallback = clickCallback;
     }
 

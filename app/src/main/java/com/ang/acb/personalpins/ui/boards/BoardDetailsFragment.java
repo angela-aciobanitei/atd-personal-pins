@@ -4,19 +4,43 @@ package com.ang.acb.personalpins.ui.boards;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ang.acb.personalpins.R;
+import com.ang.acb.personalpins.data.entity.Pin;
+import com.ang.acb.personalpins.databinding.FragmentBoardDetailsBinding;
+import com.ang.acb.personalpins.ui.common.MainActivity;
+import com.ang.acb.personalpins.ui.pins.PinsAdapter;
+import com.ang.acb.personalpins.utils.GridMarginDecoration;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Inject;
+
 import dagger.android.support.AndroidSupportInjection;
 
+import static com.ang.acb.personalpins.ui.boards.BoardsFragment.ARG_BOARD_ID;
+import static com.ang.acb.personalpins.ui.pins.PinDetailsFragment.ARG_PIN_ID;
+
 public class BoardDetailsFragment extends Fragment {
+
+    private FragmentBoardDetailsBinding binding;
+    private BoardsViewModel boardsViewModel;
+    private PinsAdapter pinsAdapter;
+    private long boardId;
+
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
 
     // Required empty public constructor
     public BoardDetailsFragment() {}
@@ -29,10 +53,67 @@ public class BoardDetailsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_board_details, container, false);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            boardId = getArguments().getLong(ARG_BOARD_ID);
+        }
     }
 
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment and get an instance of the binding class.
+        binding = FragmentBoardDetailsBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        initViewModel();
+        initAdapter();
+        populateUi();
+    }
+
+    private void initViewModel() {
+        boardsViewModel = ViewModelProviders.of(this, viewModelFactory)
+                .get(BoardsViewModel.class);
+        boardsViewModel.setBoardId(boardId);
+    }
+
+    private void initAdapter() {
+        pinsAdapter = new PinsAdapter(this::onPinClick);
+        binding.rvBoardPins.setAdapter(pinsAdapter);
+        binding.rvBoardPins.setLayoutManager(new GridLayoutManager(
+                getHostActivity(), getResources().getInteger(R.integer.span_count)));
+        binding.rvBoardPins.addItemDecoration(new GridMarginDecoration(
+                getHostActivity(), R.dimen.item_offset));
+    }
+
+    private void onPinClick(Pin pin) {
+        // On item click navigate to pin details fragment
+        Bundle args = new Bundle();
+        args.putLong(ARG_PIN_ID, pin.getId());
+        NavHostFragment.findNavController(BoardDetailsFragment.this)
+                .navigate(R.id.action_board_details_to_pin_details, args);
+    }
+
+    private void populateUi() {
+        boardsViewModel.getPinsForBoard().observe(getViewLifecycleOwner(), pins -> {
+            int boardPinsCount = (pins == null) ? 0 : pins.size();
+            binding.setBoardPinsCount(boardPinsCount);
+
+            if(boardPinsCount != 0) pinsAdapter.submitList(pins);
+            else binding.boardDetailsEmptyState.setText(R.string.no_board_pins);
+
+            binding.executePendingBindings();
+        });
+    }
+
+    private MainActivity getHostActivity(){
+        return  (MainActivity) getActivity();
+    }
 }

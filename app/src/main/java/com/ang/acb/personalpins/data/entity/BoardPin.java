@@ -1,9 +1,8 @@
-package com.ang.acb.personalpins.data.entitiy;
+package com.ang.acb.personalpins.data.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
-import androidx.room.Index;
 
 import static androidx.room.ForeignKey.CASCADE;
 

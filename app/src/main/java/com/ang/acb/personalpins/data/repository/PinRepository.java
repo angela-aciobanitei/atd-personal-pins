@@ -3,10 +3,10 @@ package com.ang.acb.personalpins.data.repository;
 import androidx.lifecycle.LiveData;
 
 import com.ang.acb.personalpins.data.db.AppDatabase;
-import com.ang.acb.personalpins.data.entitiy.Board;
-import com.ang.acb.personalpins.data.entitiy.Comment;
-import com.ang.acb.personalpins.data.entitiy.Pin;
-import com.ang.acb.personalpins.data.entitiy.Tag;
+import com.ang.acb.personalpins.data.entity.Board;
+import com.ang.acb.personalpins.data.entity.Comment;
+import com.ang.acb.personalpins.data.entity.Pin;
+import com.ang.acb.personalpins.data.entity.Tag;
 import com.ang.acb.personalpins.utils.AppExecutors;
 
 import java.util.List;
