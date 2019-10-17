@@ -20,4 +20,9 @@
     <string name="pins">Pins</string>
     <string name="take_photo">New Photo</string>
     <string name="record_video">New Video</string>
+    <string name="new_board">NEW BOARD</string>
+    <string name="board_name">Board name</string>
+    <string name="dialog_pos_button">OK</string>
+    <string name="dialog_neg_button">CANCEL</string>
+    <string name="board_cover">Board Default Cover</string>
 </resources>

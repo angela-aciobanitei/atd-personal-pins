@@ -64,4 +64,8 @@ public class BoardsViewModel extends ViewModel {
         return  pins;
     }
 
+    public void createBoard(String title) {
+        boardRepository.insertBoard(new Board(title, " "));
+    }
+
 }

@@ -36,6 +36,20 @@ public class Pin {
     @Ignore
     private List<Comment> commentList;
 
+    public Pin(long id, String title, String photoUri, String videoUri) {
+        this.id = id;
+        this.title = title;
+        this.photoUri = photoUri;
+        this.videoUri = videoUri;
+    }
+
+    @Ignore
+    public Pin(String title, String photoUri, String videoUri) {
+        this.title = title;
+        this.photoUri = photoUri;
+        this.videoUri = videoUri;
+    }
+
     public long getId() {
         return id;
     }

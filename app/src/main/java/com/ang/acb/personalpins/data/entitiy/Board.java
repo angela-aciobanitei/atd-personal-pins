@@ -4,6 +4,7 @@ package com.ang.acb.personalpins.data.entitiy;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 
@@ -22,6 +23,18 @@ public class Board {
 
     @ColumnInfo(name = "photo_cover_uri")
     private String photoCoverUri;
+
+    public Board(long id, String title, String photoCoverUri) {
+        this.id = id;
+        this.title = title;
+        this.photoCoverUri = photoCoverUri;
+    }
+
+    @Ignore
+    public Board(String title, String photoCoverUri) {
+        this.title = title;
+        this.photoCoverUri = photoCoverUri;
+    }
 
     public long getId() {
         return id;

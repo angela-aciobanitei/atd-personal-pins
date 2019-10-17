@@ -1,22 +1,52 @@
 package com.ang.acb.personalpins.ui.boards;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.ang.acb.personalpins.R;
+import com.ang.acb.personalpins.data.entitiy.Board;
+import com.ang.acb.personalpins.databinding.FragmentBoardsBinding;
+import com.ang.acb.personalpins.ui.common.MainActivity;
+import com.ang.acb.personalpins.utils.GridMarginDecoration;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
+import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 
 public class BoardsFragment extends Fragment {
+
+    private static final String ARG_BOARD_ID = "ARG_BOARD_ID";
+
+    private FragmentBoardsBinding binding;
+    private BoardsAdapter boardsAdapter;
+    private BoardsViewModel boardsViewModel;
+
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
 
     // Required empty public constructor
     public BoardsFragment() {}
@@ -31,10 +61,96 @@ public class BoardsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_boards, container, false);
+        // Inflate the layout for this fragment.
+        binding = FragmentBoardsBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        initViewModel();
+        initAdapter();
+        handleNewBoardCreation();
+        populateUi();
+    }
+
+    private void initViewModel() {
+        boardsViewModel = ViewModelProviders.of(getHostActivity(), viewModelFactory)
+                .get(BoardsViewModel.class);
+    }
+
+    private void initAdapter() {
+        boardsAdapter = new BoardsAdapter(this::onBoardClick);
+        RecyclerView recyclerView = binding.rvBoards;
+        binding.rvBoards.setAdapter(boardsAdapter);
+        binding.rvBoards.setLayoutManager(new GridLayoutManager(
+                getHostActivity(), getResources().getInteger(R.integer.span_count)));
+        recyclerView.addItemDecoration(new GridMarginDecoration(
+                getHostActivity(), R.dimen.item_offset));
+
+    }
+
+    private void onBoardClick(Board board) {
+        // On item click navigate to board details fragment
+        Bundle args = new Bundle();
+        args.putLong(ARG_BOARD_ID, board.getId());
+        NavHostFragment.findNavController(BoardsFragment.this)
+                .navigate(R.id.action_board_list_to_board_details, args);
+    }
+
+    private void populateUi() {
+        boardsViewModel.getAllBoards().observe(getViewLifecycleOwner(), boards -> {
+            if(boards != null) {
+                boardsAdapter.submitList(boards);
+            }
+        });
+    }
+
+    private void handleNewBoardCreation() {
+        binding.fabCreateNewBoard.setOnClickListener(view -> {
+            createNewBoardDialog();
+        });
+
+    }
+
+    public void createNewBoardDialog() {
+        MainActivity activity = getHostActivity();
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
+        View dialogView = activity.getLayoutInflater()
+                .inflate(R.layout.create_new_board_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+        // Setup dialog buttons
+        final EditText editText = dialogView.findViewById(R.id.dialog_edit_text);
+        dialogBuilder.setPositiveButton(R.string.dialog_pos_button, (dialog, whichButton) -> {
+            String input = editText.getText().toString();
+            if (input.trim().length() != 0) boardsViewModel.createBoard(input);
+            else dialog.dismiss();
+        });
+
+        dialogBuilder.setNegativeButton(R.string.dialog_neg_button, (dialog, whichButton) ->
+                dialog.cancel());
+
+        AlertDialog dialog = dialogBuilder.create();
+        dialog.show();
+
+        // Customize dialog buttons
+        Button posBtn = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        posBtn.setBackgroundColor(ContextCompat.getColor(activity, android.R.color.transparent));
+        posBtn.setTextColor(ContextCompat.getColor(activity,R.color.colorAccent));
+        posBtn.setPadding(16, 0, 16, 0);
+        Button negBtn = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        negBtn.setBackgroundColor(ContextCompat.getColor(activity, android.R.color.transparent));
+        negBtn.setTextColor(ContextCompat.getColor(activity,R.color.colorAccent));
+        negBtn.setPadding(16, 0, 16, 0);
+    }
+
+    private MainActivity getHostActivity(){
+        return  (MainActivity) getActivity();
     }
 
 }
