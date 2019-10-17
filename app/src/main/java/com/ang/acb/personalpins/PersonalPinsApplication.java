@@ -3,6 +3,8 @@ package com.ang.acb.personalpins;
 import android.app.Activity;
 import android.app.Application;
 
+import com.ang.acb.personalpins.di.DaggerAppComponent;
+
 import javax.inject.Inject;
 
 import dagger.android.DispatchingAndroidInjector;
@@ -23,10 +25,7 @@ public class PersonalPinsApplication extends Application implements HasActivityI
     public void onCreate() {
         super.onCreate();
 
-        DaggerAppComponent.builder()
-                .application(this)
-                .build()
-                .inject(this);
+        DaggerAppComponent.builder().application(this).build().inject(this);
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());

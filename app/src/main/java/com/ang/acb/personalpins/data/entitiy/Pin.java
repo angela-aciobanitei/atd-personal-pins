@@ -9,15 +9,18 @@ import androidx.room.PrimaryKey;
 
 import java.util.List;
 
-@Entity(tableName = "pins")
+/**
+ * Immutable model class for a pin. Note: Since a pin can have zero or more
+ * tags, we need to define a one-to-many relationship between these two entities.
+ * Also, since a pin can have zero or more comments associated with it, we need
+ * to define a one-to-many relationship between them too.
+ */
+@Entity(tableName = "pin")
 public class Pin {
 
     @NonNull
     @PrimaryKey(autoGenerate = true)
     private long id;
-
-    @ColumnInfo(name = "board_id", index = true)
-    private String boardId;
 
     @ColumnInfo(name = "pin_title")
     private String title;
@@ -39,14 +42,6 @@ public class Pin {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getBoardId() {
-        return boardId;
-    }
-
-    public void setBoardId(String boardId) {
-        this.boardId = boardId;
     }
 
     public String getTitle() {

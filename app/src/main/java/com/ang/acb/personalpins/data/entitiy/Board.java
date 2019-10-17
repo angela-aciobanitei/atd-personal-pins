@@ -4,12 +4,13 @@ package com.ang.acb.personalpins.data.entitiy;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.util.List;
 
-@Entity(tableName = "boards")
+/**
+ * Immutable model class for a board.
+ */
+@Entity(tableName = "board")
 public class Board {
 
     @NonNull
@@ -21,9 +22,6 @@ public class Board {
 
     @ColumnInfo(name = "photo_cover_uri")
     private String photoCoverUri;
-
-    @Ignore
-    private List<Pin> pinList;
 
     public long getId() {
         return id;
@@ -47,13 +45,5 @@ public class Board {
 
     public void setPhotoCoverUri(String photoCoverUri) {
         this.photoCoverUri = photoCoverUri;
-    }
-
-    public List<Pin> getPinList() {
-        return pinList;
-    }
-
-    public void setPinList(List<Pin> pinList) {
-        this.pinList = pinList;
     }
 }

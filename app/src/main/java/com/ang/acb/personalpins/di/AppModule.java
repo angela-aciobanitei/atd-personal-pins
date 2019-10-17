@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.room.Room;
 
 import com.ang.acb.personalpins.data.dao.BoardDao;
+import com.ang.acb.personalpins.data.dao.BoardPinDao;
 import com.ang.acb.personalpins.data.dao.CommentDao;
 import com.ang.acb.personalpins.data.dao.PinDao;
 import com.ang.acb.personalpins.data.dao.TagDao;
@@ -21,7 +22,7 @@ class AppModule {
     @Singleton
     @Provides
     AppDatabase provideDatabase(Application app) {
-        return Room.databaseBuilder(app, AppDatabase.class, "youtube.db")
+        return Room.databaseBuilder(app, AppDatabase.class, "pins.db")
                 .fallbackToDestructiveMigration()
                 .build();
     }
@@ -48,5 +49,11 @@ class AppModule {
     @Provides
     CommentDao provideCommentDao(AppDatabase database) {
         return database.commentDao();
+    }
+
+    @Singleton
+    @Provides
+    BoardPinDao provideBoardPinDao(AppDatabase database) {
+        return database.boardPinDao();
     }
 }
