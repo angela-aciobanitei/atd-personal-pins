@@ -1,4 +1,4 @@
-package com.ang.acb.personalpins.ui;
+package com.ang.acb.personalpins.ui.common;
 
 import android.Manifest;
 import android.app.Activity;
@@ -42,15 +42,20 @@ import androidx.fragment.app.Fragment;
 
 import com.ang.acb.personalpins.R;
 import com.ang.acb.personalpins.utils.AutoFitTextureView;
+import com.ang.acb.personalpins.utils.CompareSizesByArea;
+import com.ang.acb.personalpins.utils.ErrorDialog;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+
+import dagger.android.support.AndroidSupportInjection;
 
 public class VideoFragment extends Fragment
         implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
@@ -82,17 +87,11 @@ public class VideoFragment extends Fragment
         INVERSE_ORIENTATIONS.append(Surface.ROTATION_270, 0);
     }
 
-    // A custom TextureView for camera preview.
-    private AutoFitTextureView mTextureView;
-
     // Button to record video
     private Button mButtonVideo;
 
-    // A reference to the opened {@link android.hardware.camera2.CameraDevice}.
-    private CameraDevice mCameraDevice;
-
-    // A reference to the current {@link android.hardware.camera2.CameraCaptureSession} for preview.
-    private CameraCaptureSession mPreviewSession;
+    // A custom TextureView for camera preview.
+    private AutoFitTextureView mTextureView;
 
     // A SurfaceTextureListener handles several lifecycle events on a TextureView.
     private TextureView.SurfaceTextureListener mSurfaceTextureListener
@@ -120,11 +119,21 @@ public class VideoFragment extends Fragment
 
     };
 
+    // A configured capture session for a CameraDevice, used for capturing images from the
+    // camera or reprocessing images captured from the camera in the same session previously.
+    private CameraCaptureSession mPreviewSession;
+
+    // A CaptureRequest.Builder for the camera preview
+    private CaptureRequest.Builder mPreviewBuilder;
+
     // The {@link android.util.Size} of camera preview.
     private Size mPreviewSize;
 
     // The {@link android.util.Size} of video recording.
     private Size mVideoSize;
+
+    // Orientation of the camera sensor
+    private Integer mSensorOrientation;
 
     private MediaRecorder mMediaRecorder;
 
@@ -137,8 +146,16 @@ public class VideoFragment extends Fragment
     // A {@link Handler} for running tasks in the background.
     private Handler mBackgroundHandler;
 
+    private String mNextVideoAbsolutePath;
+
     // A {@link Semaphore} to prevent the app from exiting before closing the camera.
     private Semaphore mCameraOpenCloseLock = new Semaphore(1);
+
+    // A reference to the opened {@link android.hardware.camera2.CameraDevice}.
+    // The CameraDevice class is a representation of a single camera connected to
+    // an Android device, allowing for fine-grain control of image capture and
+    // post-processing at high frame rates.
+    private CameraDevice mCameraDevice;
 
     // CameraDevice.StateCallback is called when CameraDevice changes its status.
     private CameraDevice.StateCallback mStateCallback = new CameraDevice.StateCallback() {
@@ -164,6 +181,7 @@ public class VideoFragment extends Fragment
                 mCameraOpenCloseLock.release();
                 cameraDevice.close();
                 mCameraDevice = null;
+
                 Activity activity = getActivity();
                 if (null != activity) {
                     activity.finish();
@@ -171,61 +189,17 @@ public class VideoFragment extends Fragment
             }
     };
 
-    private Integer mSensorOrientation;
-    private String mNextVideoAbsolutePath;
-    private CaptureRequest.Builder mPreviewBuilder;
-
     public static VideoFragment newInstance() {
         return new VideoFragment();
     }
 
-    /**
-     * In this sample, we choose a video size with 3x4 aspect ratio. Also, we don't use
-     * sizes larger than 1080p, since MediaRecorder cannot handle such a high-resolution video.
-     *
-     * @param choices The list of available sizes
-     * @return The video size
-     */
-    private static Size chooseVideoSize(Size[] choices) {
-        for (Size size : choices) {
-            if (size.getWidth() == size.getHeight() * 4 / 3 && size.getWidth() <= 1080) {
-                return size;
-            }
-        }
-        Log.e(TAG, "Couldn't find any suitable video size");
-        return choices[choices.length - 1];
-    }
-
-    /**
-     * Given {@code choices} of {@code Size}s supported by a camera, chooses the smallest
-     * one whose width and height are at least as large as the respective requested values,
-     * and whose aspect ratio matches with the specified value.
-     *
-     * @param choices The list of sizes that the camera supports for the intended output class
-     * @param width The minimum desired width
-     * @param height The minimum desired height
-     * @param aspectRatio The aspect ratio
-     * @return The optimal {@code Size}, or an arbitrary one if none were big enough
-     */
-    private static Size chooseOptimalSize(Size[] choices, int width, int height, Size aspectRatio) {
-        // Collect the supported resolutions that are at least as big as the preview Surface.
-        List<Size> bigEnough = new ArrayList<>();
-        int w = aspectRatio.getWidth();
-        int h = aspectRatio.getHeight();
-        for (Size option : choices) {
-            if (option.getHeight() == option.getWidth() * h / w &&
-                    option.getWidth() >= width && option.getHeight() >= height) {
-                bigEnough.add(option);
-            }
-        }
-
-        // Pick the smallest of those, assuming we found any.
-        if (bigEnough.size() > 0) {
-            return Collections.min(bigEnough, new CompareSizesByArea());
-        } else {
-            Log.e(TAG, "Couldn't find any suitable preview size");
-            return choices[0];
-        }
+    @Override
+    public void onAttach(@NotNull Context context) {
+        // Note: when using Dagger for injecting Fragment objects, inject as early
+        // as possible. For this reason, call AndroidInjection.inject() in onAttach().
+        // This also prevents inconsistencies if the Fragment is reattached.
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
     }
 
     @Override
@@ -238,7 +212,6 @@ public class VideoFragment extends Fragment
         mTextureView = view.findViewById(R.id.texture);
         mButtonVideo = view.findViewById(R.id.video);
         mButtonVideo.setOnClickListener(this);
-        view.findViewById(R.id.info).setOnClickListener(this);
     }
 
     @Override
@@ -261,24 +234,11 @@ public class VideoFragment extends Fragment
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.video: {
-                if (mIsRecordingVideo) {
-                    stopRecordingVideo();
-                } else {
-                    startRecordingVideo();
-                }
-                break;
-            }
-            case R.id.info: {
-                Activity activity = getActivity();
-                if (null != activity) {
-                    new AlertDialog.Builder(activity)
-                            .setMessage(R.string.intro_message)
-                            .setPositiveButton(android.R.string.ok, null)
-                            .show();
-                }
-                break;
+        if (view.getId() == R.id.video) {
+            if (mIsRecordingVideo) {
+                stopRecordingVideo();
+            } else {
+                startRecordingVideo();
             }
         }
     }
@@ -377,6 +337,10 @@ public class VideoFragment extends Fragment
         if (null == activity || activity.isFinishing()) {
             return;
         }
+
+        // To enumerate, query, and open available camera devices, obtain a CameraManager
+        // instance. CameraManager is a system service manager for detecting, characterizing,
+        // and connecting to CameraDevice.
         CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
         try {
             Log.d(TAG, "tryAcquire");
@@ -385,13 +349,16 @@ public class VideoFragment extends Fragment
             }
             String cameraId = manager.getCameraIdList()[0];
 
-            // Choose the sizes for camera preview and video recording.
+            // Individual CameraDevices provide a set of static property information that
+            // describes the hardware device and the available settings and output parameters
+            // for the device. This information is provided through the CameraCharacteristics
+            // object, and is available through getCameraCharacteristics(String)
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
-            StreamConfigurationMap map = characteristics
-                    .get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+            StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             mSensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
             if (map == null) throw new RuntimeException("Cannot get available preview/video sizes");
 
+            // Choose the sizes for camera preview and video recording.
             mVideoSize = chooseVideoSize(map.getOutputSizes(MediaRecorder.class));
             mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class), width, height, mVideoSize);
 
@@ -438,6 +405,55 @@ public class VideoFragment extends Fragment
     }
 
     /**
+     * In this sample, we choose a video size with 3x4 aspect ratio. Also, we don't use
+     * sizes larger than 1080p, since MediaRecorder cannot handle such a high-resolution video.
+     *
+     * @param choices The list of available sizes
+     * @return The video size
+     */
+    private static Size chooseVideoSize(Size[] choices) {
+        for (Size size : choices) {
+            if (size.getWidth() == size.getHeight() * 4 / 3 && size.getWidth() <= 1080) {
+                return size;
+            }
+        }
+        Log.e(TAG, "Couldn't find any suitable video size");
+        return choices[choices.length - 1];
+    }
+
+    /**
+     * Given {@code choices} of {@code Size}s supported by a camera, chooses the smallest
+     * one whose width and height are at least as large as the respective requested values,
+     * and whose aspect ratio matches with the specified value.
+     *
+     * @param choices The list of sizes that the camera supports for the intended output class
+     * @param width The minimum desired width
+     * @param height The minimum desired height
+     * @param aspectRatio The aspect ratio
+     * @return The optimal {@code Size}, or an arbitrary one if none were big enough
+     */
+    private static Size chooseOptimalSize(Size[] choices, int width, int height, Size aspectRatio) {
+        // Collect the supported resolutions that are at least as big as the preview Surface.
+        List<Size> bigEnough = new ArrayList<>();
+        int w = aspectRatio.getWidth();
+        int h = aspectRatio.getHeight();
+        for (Size option : choices) {
+            if (option.getHeight() == option.getWidth() * h / w &&
+                    option.getWidth() >= width && option.getHeight() >= height) {
+                bigEnough.add(option);
+            }
+        }
+
+        // Pick the smallest of those, assuming we found any.
+        if (bigEnough.size() > 0) {
+            return Collections.min(bigEnough, new CompareSizesByArea());
+        } else {
+            Log.e(TAG, "Couldn't find any suitable preview size");
+            return choices[0];
+        }
+    }
+
+    /**
      * Start the camera preview.
      */
     private void startPreview() {
@@ -449,11 +465,20 @@ public class VideoFragment extends Fragment
             SurfaceTexture texture = mTextureView.getSurfaceTexture();
             assert texture != null;
             texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
+            // Construct a CaptureRequest, which defines all the capture parameters needed by
+            // a camera device to capture a single image. The request also lists which of the
+            // configured output Surfaces should be used as targets for this capture. The
+            // CameraDevice has a factory method for creating a request builder for a given
+            // use case, which is optimized for the Android device the application is running on.
             mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
-
             Surface previewSurface = new Surface(texture);
             mPreviewBuilder.addTarget(previewSurface);
 
+            // To capture or stream images from a camera device, the application must first
+            // create a camera capture session with a set of output Surfaces for use with the
+            // camera device, with createCaptureSession(SessionConfiguration). Each Surface has
+            // to be pre-configured with an appropriate size and format (if applicable) to
+            // match the sizes and formats available from the camera device.
             mCameraDevice.createCaptureSession(Collections.singletonList(previewSurface),
                     new CameraCaptureSession.StateCallback() {
 
@@ -476,6 +501,13 @@ public class VideoFragment extends Fragment
         }
     }
 
+    private void closePreviewSession() {
+        if (mPreviewSession != null) {
+            mPreviewSession.close();
+            mPreviewSession = null;
+        }
+    }
+
     /**
      * Update the camera preview. {@link #startPreview()} needs to be called in advance.
      */
@@ -484,17 +516,14 @@ public class VideoFragment extends Fragment
             return;
         }
         try {
-            setUpCaptureRequestBuilder(mPreviewBuilder);
+            // Setup capture request builder
+            mPreviewBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
             HandlerThread thread = new HandlerThread("CameraPreview");
             thread.start();
             mPreviewSession.setRepeatingRequest(mPreviewBuilder.build(), null, mBackgroundHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
-    }
-
-    private void setUpCaptureRequestBuilder(CaptureRequest.Builder builder) {
-        builder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
     }
 
     /**
@@ -526,41 +555,6 @@ public class VideoFragment extends Fragment
             matrix.postRotate(90 * (rotation - 2), centerX, centerY);
         }
         mTextureView.setTransform(matrix);
-    }
-
-    private void setUpMediaRecorder() throws IOException {
-        final Activity activity = getActivity();
-        if (null == activity) {
-            return;
-        }
-        mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
-        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        if (mNextVideoAbsolutePath == null || mNextVideoAbsolutePath.isEmpty()) {
-            mNextVideoAbsolutePath = getVideoFilePath(getActivity());
-        }
-        mMediaRecorder.setOutputFile(mNextVideoAbsolutePath);
-        mMediaRecorder.setVideoEncodingBitRate(10000000);
-        mMediaRecorder.setVideoFrameRate(30);
-        mMediaRecorder.setVideoSize(mVideoSize.getWidth(), mVideoSize.getHeight());
-        mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
-        mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-        switch (mSensorOrientation) {
-            case SENSOR_ORIENTATION_DEFAULT_DEGREES:
-                mMediaRecorder.setOrientationHint(DEFAULT_ORIENTATIONS.get(rotation));
-                break;
-            case SENSOR_ORIENTATION_INVERSE_DEGREES:
-                mMediaRecorder.setOrientationHint(INVERSE_ORIENTATIONS.get(rotation));
-                break;
-        }
-        mMediaRecorder.prepare();
-    }
-
-    private String getVideoFilePath(Context context) {
-        final File dir = context.getExternalFilesDir(null);
-        return (dir == null ? "" : (dir.getAbsolutePath() + "/"))
-                + System.currentTimeMillis() + ".mp4";
     }
 
     private void startRecordingVideo() {
@@ -621,11 +615,39 @@ public class VideoFragment extends Fragment
 
     }
 
-    private void closePreviewSession() {
-        if (mPreviewSession != null) {
-            mPreviewSession.close();
-            mPreviewSession = null;
+    private void setUpMediaRecorder() throws IOException {
+        final Activity activity = getActivity();
+        if (null == activity) {
+            return;
         }
+        mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
+        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        if (mNextVideoAbsolutePath == null || mNextVideoAbsolutePath.isEmpty()) {
+            mNextVideoAbsolutePath = getVideoFilePath(getActivity());
+        }
+        mMediaRecorder.setOutputFile(mNextVideoAbsolutePath);
+        mMediaRecorder.setVideoEncodingBitRate(10000000);
+        mMediaRecorder.setVideoFrameRate(30);
+        mMediaRecorder.setVideoSize(mVideoSize.getWidth(), mVideoSize.getHeight());
+        mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+        mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+        switch (mSensorOrientation) {
+            case SENSOR_ORIENTATION_DEFAULT_DEGREES:
+                mMediaRecorder.setOrientationHint(DEFAULT_ORIENTATIONS.get(rotation));
+                break;
+            case SENSOR_ORIENTATION_INVERSE_DEGREES:
+                mMediaRecorder.setOrientationHint(INVERSE_ORIENTATIONS.get(rotation));
+                break;
+        }
+        mMediaRecorder.prepare();
+    }
+
+    private String getVideoFilePath(Context context) {
+        final File dir = context.getExternalFilesDir(null);
+        return (dir == null ? "" : (dir.getAbsolutePath() + "/"))
+                + System.currentTimeMillis() + ".mp4";
     }
 
     private void stopRecordingVideo() {
@@ -647,46 +669,8 @@ public class VideoFragment extends Fragment
     }
 
     /**
-     * Compares two {@code Size}s based on their areas.
+     * Shows OK/Cancel confirmation dialog about video permission.
      */
-    static class CompareSizesByArea implements Comparator<Size> {
-
-        @Override
-        public int compare(Size lhs, Size rhs) {
-            // We cast here to ensure the multiplications won't overflow
-            return Long.signum((long) lhs.getWidth() * lhs.getHeight() -
-                    (long) rhs.getWidth() * rhs.getHeight());
-        }
-    }
-
-    public static class ErrorDialog extends DialogFragment {
-
-        private static final String ARG_MESSAGE = "message";
-
-        static ErrorDialog newInstance(String message) {
-            ErrorDialog dialog = new ErrorDialog();
-            Bundle args = new Bundle();
-            args.putString(ARG_MESSAGE, message);
-            dialog.setArguments(args);
-            return dialog;
-        }
-
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Activity activity = getActivity();
-            return new AlertDialog.Builder(activity)
-                    .setMessage(getArguments().getString(ARG_MESSAGE))
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            activity.finish();
-                        }
-                    })
-                    .create();
-        }
-    }
-
     public static class ConfirmationDialog extends DialogFragment {
 
         @NonNull
@@ -699,7 +683,8 @@ public class VideoFragment extends Fragment
                             new DialogInterface.OnClickListener() {
                             @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    parent.requestPermissions(VIDEO_PERMISSIONS,
+                                    parent.requestPermissions(
+                                            VIDEO_PERMISSIONS,
                                             REQUEST_VIDEO_PERMISSIONS);
                                 }
                     })
