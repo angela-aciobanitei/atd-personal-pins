@@ -34,4 +34,8 @@ public interface PinDao {
     @Transaction
     @Query("SELECT * FROM pin WHERE id = :id")
     LiveData<Pin> getPinById(long id);
+
+    @Transaction
+    @Query("SELECT * FROM pin")
+    LiveData<List<Pin>> getAllPins();
 }

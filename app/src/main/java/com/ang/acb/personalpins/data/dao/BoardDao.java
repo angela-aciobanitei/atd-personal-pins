@@ -34,4 +34,8 @@ public interface BoardDao {
     @Transaction
     @Query("SELECT * FROM board WHERE id = :id")
     LiveData<Board> getBoardById(long id);
+
+    @Transaction
+    @Query("SELECT * FROM board")
+    LiveData<List<Board>> getAllBoards();
 }
