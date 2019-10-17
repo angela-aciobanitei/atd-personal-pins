@@ -56,6 +56,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import dagger.android.support.AndroidSupportInjection;
+import timber.log.Timber;
 
 public class VideoFragment extends Fragment
         implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
@@ -448,7 +449,7 @@ public class VideoFragment extends Fragment
         if (bigEnough.size() > 0) {
             return Collections.min(bigEnough, new CompareSizesByArea());
         } else {
-            Log.e(TAG, "Couldn't find any suitable preview size");
+            Timber.e("Couldn't find any suitable preview size");
             return choices[0];
         }
     }

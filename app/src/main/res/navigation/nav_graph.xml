@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/boards">
+
+    <!-- Navigate from board list to board details (and back/up) -->
+    <fragment
+        android:id="@+id/boards"
+        android:label="@string/boards"
+        android:name="com.ang.acb.personalpins.ui.boards.BoardsFragment"
+        tools:layout="@layout/fragment_boards">
+        <action
+            android:id="@+id/action_board_list_to_board_details"
+            app:destination="@id/board_details"
+            app:popUpTo="@string/boards">
+            <argument
+                android:name="boardId"
+                app:argType="long" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/board_details"
+        android:name="com.ang.acb.personalpins.ui.boards.BoardDetailsFragment"
+        tools:layout="@layout/fragment_board_details">
+    </fragment>
+
+    <!-- Navigate from pin list to pin details (and back/up) -->
+    <fragment
+        android:id="@+id/pins"
+        android:label="@string/pins"
+        android:name="com.ang.acb.personalpins.ui.pins.PinsFragment"
+        tools:layout="@layout/fragment_pins">
+        <action
+            android:id="@+id/action_pin_list_to_pin_details"
+            app:destination="@id/pin_details"
+            app:popUpTo="@string/pins">
+            <argument
+                android:name="pinId"
+                app:argType="long" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/pin_details"
+        android:name="com.ang.acb.personalpins.ui.pins.PinDetailsFragment"
+        tools:layout="@layout/fragment_pin_details">
+    </fragment>
+
+    <fragment
+        android:id="@+id/take_photo"
+        android:label="@string/take_photo"
+        android:name="com.ang.acb.personalpins.ui.common.PhotoFragment"
+        tools:layout="@layout/fragment_photo">
+    </fragment>
+
+    <fragment
+        android:id="@+id/record_video"
+        android:label="@string/record_video"
+        android:name="com.ang.acb.personalpins.ui.common.VideoFragment"
+        tools:layout="@layout/fragment_video">
+    </fragment>
+
+</navigation>

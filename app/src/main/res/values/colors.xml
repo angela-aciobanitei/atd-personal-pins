@@ -2,6 +2,10 @@
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#7E53C5</color>
     <color name="control_background">#cc4285f4</color>
+    <color name="colorImagePlaceholder">#FFE0E0E0</color>
+    <color name="colorGrey700">#616161</color>
+    <color name="colorGrey600">#757575</color>
+    <color name="colorGrey500">#9E9E9E</color>
 </resources>

@@ -2,10 +2,14 @@ package com.ang.acb.personalpins.ui.common;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 
 import com.ang.acb.personalpins.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import javax.inject.Inject;
 
@@ -37,11 +41,19 @@ public class MainActivity extends AppCompatActivity  implements HasSupportFragme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (null == savedInstanceState) {
-            getSupportFragmentManager().beginTransaction()
-                    //.replace(R.id.container, PhotoFragment.newInstance())
-                    .replace(R.id.container, VideoFragment.newInstance())
-                    .commit();
-        }
+        setupBottomNavigationView();
+    }
+
+    private void setupBottomNavigationView() {
+        // See: https://github.com/Levi-Moreira/TeamManagerApp
+        BottomNavigationView bottomNavigationView = findViewById(R.id.main_bottom_navigation);
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+        NavigationUI.setupActionBarWithNavController(this, navController);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        return Navigation.findNavController(this, R.id.nav_host_fragment).navigateUp();
     }
 }
