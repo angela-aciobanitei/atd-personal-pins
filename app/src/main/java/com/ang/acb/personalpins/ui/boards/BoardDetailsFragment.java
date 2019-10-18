@@ -35,7 +35,7 @@ import static com.ang.acb.personalpins.ui.pins.PinDetailsFragment.ARG_PIN_ID;
 public class BoardDetailsFragment extends Fragment {
 
     private FragmentBoardDetailsBinding binding;
-    private BoardsViewModel boardsViewModel;
+    private BoardDetailsViewModel boardDetailsViewModel;
     private PinsAdapter pinsAdapter;
     private long boardId;
 
@@ -75,13 +75,14 @@ public class BoardDetailsFragment extends Fragment {
 
         initViewModel();
         initAdapter();
-        populateUi();
+        observeBoard();
+        observePins();
     }
 
     private void initViewModel() {
-        boardsViewModel = ViewModelProviders.of(this, viewModelFactory)
-                .get(BoardsViewModel.class);
-        boardsViewModel.setBoardId(boardId);
+        boardDetailsViewModel = ViewModelProviders.of(this, viewModelFactory)
+                .get(BoardDetailsViewModel.class);
+        boardDetailsViewModel.setBoardId(boardId);
     }
 
     private void initAdapter() {
@@ -101,8 +102,18 @@ public class BoardDetailsFragment extends Fragment {
                 .navigate(R.id.action_board_details_to_pin_details, args);
     }
 
-    private void populateUi() {
-        boardsViewModel.getPinsForBoard().observe(getViewLifecycleOwner(), pins -> {
+    private void observeBoard() {
+        boardDetailsViewModel.getBoard().observe(getViewLifecycleOwner(), board -> {
+            if (board != null) {
+                if (getHostActivity().getSupportActionBar() != null) {
+                    getHostActivity().getSupportActionBar().setTitle(board.getTitle());
+                }
+            }
+        });
+    }
+
+    private void observePins() {
+        boardDetailsViewModel.getPinsForBoard().observe(getViewLifecycleOwner(), pins -> {
             int boardPinsCount = (pins == null) ? 0 : pins.size();
             binding.setBoardPinsCount(boardPinsCount);
 

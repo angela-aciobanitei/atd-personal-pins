@@ -10,13 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,15 +22,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ang.acb.personalpins.R;
-import com.ang.acb.personalpins.data.entity.Pin;
-import com.ang.acb.personalpins.data.entity.Tag;
 import com.ang.acb.personalpins.databinding.FragmentPinDetailsBinding;
 import com.ang.acb.personalpins.ui.common.MainActivity;
-import com.ang.acb.personalpins.utils.GridMarginDecoration;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -46,9 +37,9 @@ public class PinDetailsFragment extends Fragment {
     public static final String ARG_PIN_ID = "ARG_PIN_ID";
 
     private FragmentPinDetailsBinding binding;
-    private PinsViewModel pinsViewModel;
-    private TagsAdapter tagsAdapter;
-    private CommentsAdapter commentsAdapter;
+    private PinDetailsViewModel pinDetailsViewModel;
+    private PinTagsAdapter tagsAdapter;
+    private PinCommentsAdapter commentsAdapter;
     private long pinId;
 
     @Inject
@@ -90,16 +81,18 @@ public class PinDetailsFragment extends Fragment {
         observePin();
         observeTags();
         observeComments();
+        createNewTag();
+        createNewComment();
     }
 
     private void initViewModel() {
-        pinsViewModel = ViewModelProviders.of(this, viewModelFactory)
-                .get(PinsViewModel.class);
-        pinsViewModel.setPinId(pinId);
+        pinDetailsViewModel = ViewModelProviders.of(this, viewModelFactory)
+                .get(PinDetailsViewModel.class);
+        pinDetailsViewModel.setPinId(pinId);
     }
 
     private void observePin() {
-        pinsViewModel.getPin().observe(getViewLifecycleOwner(), pin -> {
+        pinDetailsViewModel.getPin().observe(getViewLifecycleOwner(), pin -> {
             if (pin != null) {
                 binding.setPin(pin);
                 binding.executePendingBindings();
@@ -108,12 +101,12 @@ public class PinDetailsFragment extends Fragment {
     }
 
     private void observeTags() {
-        tagsAdapter =  new TagsAdapter();
+        tagsAdapter =  new PinTagsAdapter();
         binding.pinPartialInfo.rvTags.setAdapter(tagsAdapter);
         binding.pinPartialInfo.rvTags.setLayoutManager(new LinearLayoutManager(
                 getContext(), LinearLayoutManager.HORIZONTAL, false));
 
-        pinsViewModel.getPinTags().observe(getViewLifecycleOwner(), tags -> {
+        pinDetailsViewModel.getPinTags().observe(getViewLifecycleOwner(), tags -> {
             binding.setTagsCount((tags == null) ? 0 : tags.size());
             if(tags != null) {
                 tagsAdapter.submitList(tags);
@@ -124,12 +117,12 @@ public class PinDetailsFragment extends Fragment {
     }
 
     private void observeComments() {
-        commentsAdapter = new CommentsAdapter();
+        commentsAdapter = new PinCommentsAdapter();
         binding.pinPartialInfo.rvComments.setAdapter(commentsAdapter);
         binding.pinPartialInfo.rvComments.setLayoutManager(new LinearLayoutManager(
                 getContext(), LinearLayoutManager.VERTICAL, false));
 
-        pinsViewModel.getPinComments().observe(getViewLifecycleOwner(), comments -> {
+        pinDetailsViewModel.getPinComments().observe(getViewLifecycleOwner(), comments -> {
             int commentsCount = (comments == null) ? 0 : comments.size();
             binding.setCommentsCount(commentsCount);
             if(commentsCount != 0) commentsAdapter.submitList(comments);
@@ -166,7 +159,7 @@ public class PinDetailsFragment extends Fragment {
         editText.setHint(R.string.tag_name);
         dialogBuilder.setPositiveButton(R.string.dialog_pos_button, (dialog, whichButton) -> {
             String input = editText.getText().toString();
-            if (input.trim().length() != 0) pinsViewModel.createTag(pinId, input);
+            if (input.trim().length() != 0) pinDetailsViewModel.createTag(pinId, input);
             else dialog.dismiss();
         });
         dialogBuilder.setNegativeButton(R.string.dialog_neg_button, (dialog, whichButton) ->
@@ -203,7 +196,7 @@ public class PinDetailsFragment extends Fragment {
         editText.setHint(R.string.comment_text);
         dialogBuilder.setPositiveButton(R.string.dialog_pos_button, (dialog, whichButton) -> {
             String input = editText.getText().toString();
-            if (input.trim().length() != 0) pinsViewModel.createComment(pinId, input);
+            if (input.trim().length() != 0) pinDetailsViewModel.createComment(pinId, input);
             else dialog.dismiss();
         });
         dialogBuilder.setNegativeButton(R.string.dialog_neg_button, (dialog, whichButton) ->
@@ -227,6 +220,4 @@ public class PinDetailsFragment extends Fragment {
     private MainActivity getHostActivity(){
         return  (MainActivity) getActivity();
     }
-
-
 }

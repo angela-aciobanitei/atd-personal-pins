@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 
 import com.ang.acb.personalpins.R;
 import com.ang.acb.personalpins.data.entity.Pin;
-import com.ang.acb.personalpins.databinding.FragmentPinsBinding;
+import com.ang.acb.personalpins.databinding.FragmentPinListBinding;
 import com.ang.acb.personalpins.ui.common.MainActivity;
 import com.ang.acb.personalpins.utils.GridMarginDecoration;
 
@@ -32,10 +32,9 @@ import static com.ang.acb.personalpins.ui.pins.PinDetailsFragment.ARG_PIN_ID;
 
 public class PinsFragment extends Fragment {
 
-    private FragmentPinsBinding binding;
+    private FragmentPinListBinding binding;
     private PinsViewModel pinsViewModel;
     private PinsAdapter pinsAdapter;
-    private long boardId;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -45,9 +44,7 @@ public class PinsFragment extends Fragment {
 
     @Override
     public void onAttach(@NotNull Context context) {
-        // Note: when using Dagger for injecting Fragment objects, inject as early
-        // as possible. For this reason, call AndroidInjection.inject() in onAttach().
-        // This also prevents inconsistencies if the Fragment is reattached.
+        // When using Dagger for injecting Fragments, inject as early as possible.
         AndroidSupportInjection.inject(this);
         super.onAttach(context);
     }
@@ -56,7 +53,7 @@ public class PinsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment and get an instance of the binding class.
-        binding = FragmentPinsBinding.inflate(inflater, container, false);
+        binding = FragmentPinListBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -67,6 +64,7 @@ public class PinsFragment extends Fragment {
         initViewModels();
         initAdapter();
         populateUi();
+        createNewPin();
     }
 
     private void initViewModels() {
@@ -101,6 +99,10 @@ public class PinsFragment extends Fragment {
 
             binding.executePendingBindings();
         });
+    }
+
+    private void createNewPin() {
+
     }
 
     private MainActivity getHostActivity(){

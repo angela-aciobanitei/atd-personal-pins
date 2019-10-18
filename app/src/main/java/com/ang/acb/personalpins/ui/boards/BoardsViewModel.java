@@ -23,18 +23,11 @@ import javax.inject.Inject;
 public class BoardsViewModel extends ViewModel {
 
     private BoardRepository boardRepository;
-    private final MutableLiveData<Long> boardId = new MutableLiveData<>();
     private LiveData<List<Board>> allBoards;
-    private LiveData<Board> board;
-    private LiveData<List<Pin>> pins;
 
     @Inject
     public BoardsViewModel(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
-    }
-
-    public void setBoardId(long id) {
-        boardId.setValue(id);
     }
 
     public LiveData<List<Board>> getAllBoards() {
@@ -42,26 +35,6 @@ public class BoardsViewModel extends ViewModel {
             allBoards = boardRepository.getAllBoards();
         }
         return allBoards;
-    }
-
-    public LiveData<Board> getBoard() {
-        if (board == null) {
-            board = Transformations.switchMap(boardId, id -> {
-                if (id == null) return AbsentLiveData.create();
-                else return boardRepository.getBoardById(id);
-            });
-        }
-        return  board;
-    }
-
-    public LiveData<List<Pin>> getPinsForBoard() {
-        if (pins == null) {
-            pins = Transformations.switchMap(boardId, id -> {
-                if (id == null) return AbsentLiveData.create();
-                else return boardRepository.getPinsForBoard(id);
-            });
-        }
-        return  pins;
     }
 
     public void createBoard(String title) {

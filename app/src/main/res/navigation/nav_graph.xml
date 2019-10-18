@@ -41,7 +41,7 @@
         android:id="@+id/pins"
         android:label="@string/pins"
         android:name="com.ang.acb.personalpins.ui.pins.PinsFragment"
-        tools:layout="@layout/fragment_pins">
+        tools:layout="@layout/fragment_pin_list">
         <action
             android:id="@+id/action_pin_list_to_pin_details"
             app:destination="@id/pin_details"

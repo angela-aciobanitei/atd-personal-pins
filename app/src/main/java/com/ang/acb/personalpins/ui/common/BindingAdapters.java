@@ -26,7 +26,7 @@ public class BindingAdapters {
     // See: https://stackoverflow.com/questions/32332003/glide-load-local-image-by-uri
     public static void bindImage(ImageView imageView, String imageUri) {
         GlideApp.with(imageView.getContext())
-                .load(R.drawable.ic_dashboard_24dp)
+                .load(R.color.colorAccent)
                 .placeholder(R.color.colorAccent)
                 .into(imageView);
     }
