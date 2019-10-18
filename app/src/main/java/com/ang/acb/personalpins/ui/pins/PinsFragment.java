@@ -2,9 +2,7 @@ package com.ang.acb.personalpins.ui.pins;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -12,9 +10,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,18 +20,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ang.acb.personalpins.BuildConfig;
 import com.ang.acb.personalpins.R;
 import com.ang.acb.personalpins.data.entity.Pin;
 import com.ang.acb.personalpins.databinding.FragmentPinListBinding;
 import com.ang.acb.personalpins.ui.common.MainActivity;
-import com.ang.acb.personalpins.ui.common.PhotoFragment;
-import com.ang.acb.personalpins.ui.common.VideoFragment;
 import com.ang.acb.personalpins.utils.ErrorDialog;
 import com.ang.acb.personalpins.utils.GridMarginDecoration;
 
@@ -43,8 +35,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -58,11 +48,8 @@ public class PinsFragment extends Fragment {
 
     private static final String FRAGMENT_DIALOG = "FRAGMENT_DIALOG";
 
-    private static final int REQUEST_CAMERA_PERMISSION = 101;
-    public static final String[] CAMERA_PERMISSIONS = {Manifest.permission.CAMERA};
-
-    private static final int REQUEST_VIDEO_PERMISSIONS = 102;
-    private static final String[] VIDEO_PERMISSIONS = {
+    private static final int REQUEST_APP_PERMISSIONS = 102;
+    private static final String[] APP_PERMISSIONS = {
             Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO};
 
@@ -149,36 +136,34 @@ public class PinsFragment extends Fragment {
     }
 
     private void takePhoto() {
-        if (!hasPermissionsGranted(CAMERA_PERMISSIONS)) {
-            requestCameraPermission();
-            return;
+        if (!permissionsGranted(APP_PERMISSIONS)) {
+            ActivityCompat.requestPermissions(getHostActivity(),
+                    APP_PERMISSIONS, REQUEST_APP_PERMISSIONS);
+        } else {
+            binding.takePictureButton.setOnClickListener(view -> {
+                // See: https://developer.android.com/training/camera/photobasics
+                Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Uri uri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+                takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT,uri);
+                startActivityForResult(takePhotoIntent, REQUEST_TAKE_PHOTO);
+
+            });
         }
-
-        binding.takePictureButton.setOnClickListener(view -> {
-            Uri uri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-
-            // See: https://developer.android.com/training/camera/photobasics
-            Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-            startActivityForResult(takePhotoIntent, REQUEST_TAKE_PHOTO);
-
-        });
     }
 
     private void recordVideo() {
-        if (!hasPermissionsGranted(VIDEO_PERMISSIONS)) {
-            requestVideoPermissions();
-            return;
+        if (!permissionsGranted(APP_PERMISSIONS)) {
+            ActivityCompat.requestPermissions(getHostActivity(),
+                    APP_PERMISSIONS, REQUEST_APP_PERMISSIONS);
+        } else {
+            binding.recordVideoButton.setOnClickListener(view -> {
+                // See:  https://developer.android.com/training/camera/videobasics
+                Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                Uri uri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
+                takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                startActivityForResult(takeVideoIntent, REQUEST_TAKE_VIDEO);
+            });
         }
-        
-        binding.recordVideoButton.setOnClickListener(view -> {
-            Uri uri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
-
-            // See:  https://developer.android.com/training/camera/videobasics
-            Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-            takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-            startActivityForResult(takeVideoIntent, REQUEST_TAKE_VIDEO);
-        });
     }
 
     private Uri getOutputMediaFileUri(int mediaType) {
@@ -222,7 +207,7 @@ public class PinsFragment extends Fragment {
         return uri;
     }
 
-    private boolean hasPermissionsGranted(String[] permissions) {
+    private boolean permissionsGranted(String[] permissions) {
         for (String permission : permissions) {
             if (ActivityCompat.checkSelfPermission(getHostActivity(), permission)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -232,70 +217,21 @@ public class PinsFragment extends Fragment {
         return true;
     }
 
-    private boolean shouldShowRequestPermissionRationale(String[] permissions) {
-        for (String permission : permissions) {
-            if (this.shouldShowRequestPermissionRationale(permission)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void requestCameraPermission() {
-        if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
-            final Fragment parent = getParentFragment();
-            new AlertDialog.Builder(getHostActivity())
-                    .setMessage(R.string.request_permission)
-                    .setPositiveButton(android.R.string.ok, (dialog, which) ->
-                            parent.requestPermissions(
-                                    CAMERA_PERMISSIONS,
-                                    REQUEST_CAMERA_PERMISSION))
-                    .setNegativeButton(android.R.string.cancel, (dialog, which) ->
-                            parent.getActivity().finish())
-                    .create()
-                    .show();
-        } else {
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
-        }
-    }
-
-    private void requestVideoPermissions() {
-        if (shouldShowRequestPermissionRationale(VIDEO_PERMISSIONS)) {
-            final Fragment parent = getParentFragment();
-            new AlertDialog.Builder(getHostActivity())
-                    .setMessage(R.string.permission_request)
-                    .setPositiveButton(android.R.string.ok, (dialog, which) ->
-                            parent.requestPermissions(
-                                    VIDEO_PERMISSIONS,
-                                    REQUEST_VIDEO_PERMISSIONS))
-                    .setNegativeButton(android.R.string.cancel, (dialog, which) ->
-                            parent.getActivity().finish())
-                    .create()
-                    .show();
-        } else {
-            this.requestPermissions(VIDEO_PERMISSIONS, REQUEST_VIDEO_PERMISSIONS);
-        }
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_CAMERA_PERMISSION) {
-            if (grantResults.length != 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                ErrorDialog.newInstance(getString(R.string.request_permission))
-                        .show(getChildFragmentManager(), FRAGMENT_DIALOG);
-            }
-        } else if (requestCode == REQUEST_VIDEO_PERMISSIONS) {
-            if (grantResults.length == VIDEO_PERMISSIONS.length) {
+       if (requestCode == REQUEST_APP_PERMISSIONS) {
+            if (grantResults.length == APP_PERMISSIONS.length) {
                 for (int result : grantResults) {
                     if (result != PackageManager.PERMISSION_GRANTED) {
-                        ErrorDialog.newInstance(getString(R.string.permission_request))
+                        ErrorDialog.newInstance(getString(R.string.video_request_rationale))
                                 .show(getChildFragmentManager(), FRAGMENT_DIALOG);
                         break;
                     }
                 }
             } else {
-                ErrorDialog.newInstance(getString(R.string.permission_request))
+                ErrorDialog.newInstance(getString(R.string.video_request_rationale))
                         .show(getChildFragmentManager(), FRAGMENT_DIALOG);
             }
         } else {

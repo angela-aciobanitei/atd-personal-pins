@@ -58,18 +58,4 @@
         tools:layout="@layout/fragment_pin_details">
     </fragment>
 
-    <fragment
-        android:id="@+id/take_photo"
-        android:label="@string/take_photo"
-        android:name="com.ang.acb.personalpins.ui.common.PhotoFragment"
-        tools:layout="@layout/fragment_photo">
-    </fragment>
-
-    <fragment
-        android:id="@+id/record_video"
-        android:label="@string/record_video"
-        android:name="com.ang.acb.personalpins.ui.common.VideoFragment"
-        tools:layout="@layout/fragment_video">
-    </fragment>
-
 </navigation>

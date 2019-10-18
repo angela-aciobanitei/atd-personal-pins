@@ -11,14 +11,4 @@
         android:title="@string/pins"
         android:icon="@drawable/ic_collections_24dp" />
 
-    <item
-        android:id="@+id/take_photo"
-        android:title="@string/take_photo"
-        android:icon="@drawable/ic_camera_24dp" />
-
-    <item
-        android:id="@+id/record_video"
-        android:title="@string/record_video"
-        android:icon="@drawable/ic_videocam_24dp" />
-
 </menu>
