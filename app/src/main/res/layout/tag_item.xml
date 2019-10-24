@@ -16,7 +16,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:text="@{tag.tagText}"
-        android:drawableStart="@drawable/ic_label_black_24dp"
+        android:drawableStart="@drawable/ic_label_24dp"
         android:drawableTint="@color/colorAccent"
         android:drawablePadding="8dp"
         tools:text="@tools:sample/lorem"/>

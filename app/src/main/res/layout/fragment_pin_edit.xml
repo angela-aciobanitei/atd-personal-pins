@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="isVideo" type="boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <VideoView
+            android:id="@+id/pin_edit_video_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="16:9"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/barrier1"
+            app:toggleVisibility="@{isVideo}"/>
+
+        <ImageView
+            android:id="@+id/pin_edit_video_play_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/pin_edit_video_play_button"
+            android:src="@drawable/ic_play_circle_outline"
+            app:layout_constraintStart_toStartOf="@id/pin_edit_video_view"
+            app:layout_constraintEnd_toEndOf="@id/pin_edit_video_view"
+            app:layout_constraintTop_toTopOf="@id/pin_edit_video_view"
+            app:layout_constraintBottom_toBottomOf="@id/pin_edit_video_view"
+            app:toggleVisibility="@{isVideo}"/>
+
+        <ImageView
+            android:id="@+id/pin_edit_photo"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:contentDescription="@string/pin_details_photo"
+            app:layout_constraintDimensionRatio="16:9"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/barrier1"
+            app:toggleVisibility="@{!isVideo}"/>
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="pin_edit_video_view,pin_edit_photo" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/pin_name_text_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/vertical_margin"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:layout_marginEnd="@dimen/horizontal_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/barrier1">
+
+            <EditText
+                android:id="@+id/pin_name_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textNoSuggestions"
+                android:imeOptions="actionSearch"
+                android:importantForAutofill="no"
+                android:hint="@string/pin_name"
+                tools:text="pin name" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5"/>
+
+        <Button
+            android:id="@+id/pin_edit_cancel_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@android:string/cancel"
+            android:textColor="@android:color/white"
+            android:background="@color/colorAccent"
+            android:layout_marginTop="@dimen/vertical_margin"
+            android:layout_marginBottom="@dimen/vertical_margin"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideline"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <Button
+            android:id="@+id/pin_edit_save_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/pin_edit_save_btn_text"
+            android:textColor="@android:color/white"
+            android:background="@color/colorAccent"
+            android:layout_marginTop="@dimen/vertical_margin"
+            android:layout_marginBottom="@dimen/vertical_margin"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="@dimen/horizontal_margin"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

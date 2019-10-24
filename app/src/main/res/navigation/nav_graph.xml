@@ -50,12 +50,53 @@
                 android:name="pinId"
                 app:argType="long" />
         </action>
+
+        <action
+            android:id="@+id/action_pin_list_to_picker_dialog"
+            app:destination="@id/picker_dialog"
+            app:popUpTo="@+id/pins">
+        </action>
+
+        <action
+            android:id="@+id/action_pin_list_to_pin_edit"
+            app:destination="@id/pin_edit"
+            app:popUpTo="@+id/pins">
+            <argument
+                android:name="pinUriString"
+                app:argType="string" />
+            <argument
+                android:name="isVideo"
+                app:argType="boolean" />
+        </action>
     </fragment>
 
     <fragment
         android:id="@+id/pin_details"
         android:name="com.ang.acb.personalpins.ui.pins.PinDetailsFragment"
         tools:layout="@layout/fragment_pin_details">
+    </fragment>
+
+    <fragment
+        android:id="@+id/pin_edit"
+        android:name="com.ang.acb.personalpins.ui.pins.PinEditFragment"
+        tools:layout="@layout/fragment_pin_edit">
+    </fragment>
+
+    <fragment
+        android:id="@+id/picker_dialog"
+        android:name="com.ang.acb.personalpins.ui.pins.PickerDialogFragment"
+        tools:layout="@layout/fragment_picker_dialog">
+        <action
+            android:id="@+id/action_picker_dialog_to_pin_edit"
+            app:destination="@id/pin_edit"
+            app:popUpTo="@+id/pins">
+            <argument
+                android:name="pinUriString"
+                app:argType="string" />
+            <argument
+                android:name="isVideo"
+                app:argType="boolean" />
+        </action>
     </fragment>
 
 </navigation>

@@ -44,14 +44,29 @@
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="pin_details_video_container,pin_details_photo" />
 
+        <TextView
+            android:id="@+id/pin_details_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@{pin.title}"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/barrier1"
+            app:toggleVisibility="@{pin.title != null}"
+            tools:text="@tools:sample/lorem"/>
+
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/video_details_nested_scroll_view"
+            android:id="@+id/pin_details_nested_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="?attr/actionBarSize"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/barrier1"
+            app:layout_constraintTop_toBottomOf="@id/pin_details_title"
             app:toggleVisibility="@{pin != null}">
 
             <include

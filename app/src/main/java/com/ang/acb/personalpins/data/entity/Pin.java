@@ -2,6 +2,7 @@ package com.ang.acb.personalpins.data.entity;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -25,9 +26,11 @@ public class Pin {
     @ColumnInfo(name = "pin_title")
     private String title;
 
+    @Nullable
     @ColumnInfo(name = "photo_uri")
     private String photoUri;
 
+    @Nullable
     @ColumnInfo(name = "video_uri")
     private String videoUri;
 
@@ -36,7 +39,7 @@ public class Pin {
     @Ignore
     private List<Comment> commentList;
 
-    public Pin(long id, String title, String photoUri, String videoUri) {
+    public Pin(long id, String title, @Nullable String photoUri, @Nullable String videoUri) {
         this.id = id;
         this.title = title;
         this.photoUri = photoUri;
@@ -44,7 +47,7 @@ public class Pin {
     }
 
     @Ignore
-    public Pin(String title, String photoUri, String videoUri) {
+    public Pin(String title, @Nullable String photoUri, @Nullable String videoUri) {
         this.title = title;
         this.photoUri = photoUri;
         this.videoUri = videoUri;
@@ -66,19 +69,21 @@ public class Pin {
         this.title = title;
     }
 
+    @Nullable
     public String getPhotoUri() {
         return photoUri;
     }
 
-    public void setPhotoUri(String photoUri) {
+    public void setPhotoUri(@Nullable String photoUri) {
         this.photoUri = photoUri;
     }
 
+    @Nullable
     public String getVideoUri() {
         return videoUri;
     }
 
-    public void setVideoUri(String videoUri) {
+    public void setVideoUri(@Nullable String videoUri) {
         this.videoUri = videoUri;
     }
 
