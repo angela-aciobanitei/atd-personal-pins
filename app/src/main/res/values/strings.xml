@@ -1,45 +1,38 @@
 <resources>
     <string name="app_name">Personal Pins</string>
 
-    <string name="picture">Picture</string>
-    <string name="description_info">Info</string>
-    <string name="camera_request_rationale">This app needs camera permission.</string>
-    <string name="camera_error">This device doesn\'t support Camera2 API.</string>
-    <string name="record">Record</string>
-    <string name="stop">Stop</string>
-    <string name="video_request_rationale">This app needs permission for camera and audio recording.</string>
-    <string name="permission_denied_explanation">Permission was denied, but is needed for core functionality.</string>
-
     <!-- Used for Navigation -->
     <string name="boards">Boards</string>
     <string name="pins">Pins</string>
-
-    <string name="new_board">NEW BOARD</string>
-    <string name="board_name">Board name</string>
-    <string name="dialog_pos_button">OK</string>
-    <string name="dialog_neg_button">Cancel</string>
-    <string name="board_cover">Board Default Cover</string>
-    <string name="no_board_pins">No pins for this board yet</string>
-    <string name="no_boards">No boards created yet</string>
-    <string name="no_pins">No pins created yet</string>
-    <string name="pin_details_photo">Pin Details Photo</string>
-    <string name="pin_details_tags_label">Tags</string>
-    <string name="pin_details_comments_label">Comments</string>
-    <string name="new_tag">ADD TAG</string>
-    <string name="new_comment">ADD COMMENT</string>
-    <string name="tag_name">Tag name</string>
-    <string name="comment_text">Comment Text</string>
-    <string name="new_pin">NEW PIN</string>
 
     <string name="take_photo">Take Photo</string>
     <string name="pick_photo">Pick Photo</string>
     <string name="record_video">Record Video</string>
     <string name="pick_video">Pick Video</string>
 
-    <string name="pin_edit_video_play_button">Pin Details Video Play Button</string>
+    <string name="new_board">NEW BOARD</string>
+    <string name="board_name">Board name</string>
+    <string name="save">SAVE</string>
+    <string name="cancel">Cancel</string>
+    <string name="board_cover">Board Default Cover</string>
+    <string name="no_board_pins">No pins for this board yet</string>
+    <string name="no_boards">No boards created yet</string>
+    <string name="no_pins">No pins created yet</string>
+    <string name="pin_photo">Pin Details Photo</string>
+    <string name="pin_tags_label">TAGS</string>
+    <string name="pin_comments_label">COMMENTS</string>
+    <string name="new_tag">CREATE TAG</string>
+    <string name="new_comment">CREATE COMMENT</string>
+    <string name="tag_name">Tag name</string>
+    <string name="comment_text">Comment Text</string>
+    <string name="new_pin">NEW PIN</string>
+
+    <string name="pin_edit">Edit Pin</string>
+    <string name="pin_update">Update Pin</string>
+    <string name="video_play_button">Video Play Button</string>
     <string name="pin_name">Pin name</string>
-    <string name="pin_edit_save_btn_text">Save</string>
     <string name="enter_pin_title">Please enter a pin title</string>
     <string name="pin_cover">Pin Item Cover</string>
+
 
 </resources>

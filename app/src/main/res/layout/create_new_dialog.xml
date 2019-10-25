@@ -34,19 +34,12 @@
         tools:hint="@string/board_name"
         tools:ignore="LabelFor" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5"/>
-
     <Button
         style="@style/Widget.AppCompat.Button.Borderless"
         android:id="@+id/dialog_new_cancel_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@android:string/cancel"
+        android:text="@string/cancel"
         android:textColor="@color/colorAccent"
         android:layout_marginTop="@dimen/vertical_margin"
         android:layout_marginBottom="@dimen/vertical_margin"
@@ -58,7 +51,7 @@
         android:id="@+id/dialog_new_save_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/pin_edit_save_btn_text"
+        android:text="@string/save"
         android:textColor="@color/colorAccent"
         android:layout_marginTop="@dimen/vertical_margin"
         android:layout_marginBottom="@dimen/vertical_margin"

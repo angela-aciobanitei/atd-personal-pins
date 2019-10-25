@@ -31,10 +31,10 @@ import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 
+import static com.ang.acb.personalpins.ui.pins.PinsFragment.ARG_PIN_ID;
+
 
 public class PinDetailsFragment extends Fragment {
-
-    public static final String ARG_PIN_ID = "ARG_PIN_ID";
 
     private FragmentPinDetailsBinding binding;
     private PinDetailsViewModel pinDetailsViewModel;

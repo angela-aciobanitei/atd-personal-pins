@@ -30,7 +30,7 @@ import javax.inject.Inject;
 import dagger.android.support.AndroidSupportInjection;
 
 import static com.ang.acb.personalpins.ui.boards.BoardsFragment.ARG_BOARD_ID;
-import static com.ang.acb.personalpins.ui.pins.PinDetailsFragment.ARG_PIN_ID;
+import static com.ang.acb.personalpins.ui.pins.PinsFragment.ARG_PIN_ID;
 
 public class BoardDetailsFragment extends Fragment {
 

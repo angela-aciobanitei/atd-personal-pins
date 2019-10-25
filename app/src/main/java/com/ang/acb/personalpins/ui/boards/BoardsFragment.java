@@ -3,12 +3,10 @@ package com.ang.acb.personalpins.ui.boards;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -112,15 +110,13 @@ public class BoardsFragment extends Fragment {
 
     private void handleNewBoardCreation() {
         binding.newBoardButton.setOnClickListener(view -> {
-            createNewBoardDialog();
+            showNewBoardDialog();
         });
-
     }
 
-    private void createNewBoardDialog() {
-        MainActivity activity = getHostActivity();
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
-        View dialogView = activity.getLayoutInflater()
+    private void showNewBoardDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        View dialogView = getHostActivity().getLayoutInflater()
                 .inflate(R.layout.create_new_dialog, null);
         dialogBuilder.setView(dialogView);
 
@@ -137,7 +133,7 @@ public class BoardsFragment extends Fragment {
         Button saveButton = dialogView.findViewById(R.id.dialog_new_save_btn);
         saveButton.setOnClickListener(view -> {
             String input = editText.getText().toString();
-            if (input.trim().length() != 0) boardsViewModel.createBoard(input);
+            if (input.trim().length() != 0) boardsViewModel.createBoard(getContext(), input);
             dialog.dismiss();
         });
 

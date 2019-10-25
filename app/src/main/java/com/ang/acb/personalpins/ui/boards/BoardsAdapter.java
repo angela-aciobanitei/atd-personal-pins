@@ -1,5 +1,6 @@
 package com.ang.acb.personalpins.ui.boards;
 
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -72,6 +73,8 @@ public class BoardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         void bindTo(Board board) {
             // Bind data for this item.
             binding.setBoard(board);
+
+            binding.boardCover.setImageURI(Uri.parse(board.getPhotoCoverUri()));
 
             // Binding must be executed immediately.
             binding.executePendingBindings();

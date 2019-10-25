@@ -16,5 +16,6 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:text="@{tag.tagText}"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         tools:text="@tools:sample/lorem"/>
 </layout>

@@ -99,6 +99,9 @@ public class PinEditFragment extends Fragment {
 
     private void playVideo() {
         binding.pinEditVideoView.setVideoURI(pinUri);
+        // Set the preview image in videoview before playing
+        binding.pinEditVideoView.pause();
+        binding.pinEditVideoView.seekTo(100);
         binding.pinEditVideoPlayBtn.setOnClickListener(view -> {
             if (binding.pinEditVideoView.isPlaying()){
                 binding.pinEditVideoView.pause();

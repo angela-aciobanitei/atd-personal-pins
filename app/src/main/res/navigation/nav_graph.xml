@@ -22,6 +22,7 @@
         </action>
     </fragment>
 
+    <!-- Navigate from board details to pin details (and back/up) -->
     <fragment
         android:id="@+id/board_details"
         android:name="com.ang.acb.personalpins.ui.boards.BoardDetailsFragment"
@@ -36,12 +37,12 @@
         </action>
     </fragment>
 
+    <!-- Navigate from pin list to pin details (and back/up) -->
     <fragment
         android:id="@+id/pins"
         android:label="@string/pins"
         android:name="com.ang.acb.personalpins.ui.pins.PinsFragment"
         tools:layout="@layout/fragment_pin_list">
-        <!-- Navigate from pin list to pin details (and back/up) -->
         <action
             android:id="@+id/action_pin_list_to_pin_details"
             app:destination="@id/pin_details"
@@ -49,12 +50,6 @@
             <argument
                 android:name="pinId"
                 app:argType="long" />
-        </action>
-        <!-- Navigate from pin list to picker dialog fragment -->
-        <action
-            android:id="@+id/action_pin_list_to_picker_dialog"
-            app:destination="@id/picker_dialog"
-            app:popUpTo="@+id/pins">
         </action>
     </fragment>
 
@@ -64,12 +59,7 @@
         tools:layout="@layout/fragment_pin_details">
     </fragment>
 
-    <fragment
-        android:id="@+id/pin_edit"
-        android:name="com.ang.acb.personalpins.ui.pins.PinEditFragment"
-        tools:layout="@layout/fragment_pin_edit">
-    </fragment>
-
+    <!-- Navigate from picker dialog fragment to pin edit fragment -->
     <dialog
         android:id="@+id/picker_dialog"
         android:name="com.ang.acb.personalpins.ui.pins.PickerDialogFragment"
@@ -86,5 +76,12 @@
                 app:argType="boolean" />
         </action>
     </dialog>
+
+    <fragment
+        android:id="@+id/pin_edit"
+        android:label="@string/pin_edit"
+        android:name="com.ang.acb.personalpins.ui.pins.PinEditFragment"
+        tools:layout="@layout/fragment_pin_edit">
+    </fragment>
 
 </navigation>

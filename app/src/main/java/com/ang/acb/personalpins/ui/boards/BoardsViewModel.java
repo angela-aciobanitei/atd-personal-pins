@@ -1,10 +1,16 @@
 package com.ang.acb.personalpins.ui.boards;
 
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.res.Resources;
+import android.net.Uri;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
+import com.ang.acb.personalpins.R;
 import com.ang.acb.personalpins.data.entity.Board;
 import com.ang.acb.personalpins.data.entity.Pin;
 import com.ang.acb.personalpins.data.repository.BoardRepository;
@@ -37,9 +43,20 @@ public class BoardsViewModel extends ViewModel {
         return allBoards;
     }
 
-    public void createBoard(String title) {
+    public void createBoard(Context context, String title) {
         // Set default board image with fixed image.
+        boardRepository.insertBoard(new Board(title,
+                getImageResourceUri(context, R.drawable.board).toString()));
+    }
+
+    private Uri getImageResourceUri(Context context, int resourceId) {
         // https://stackoverflow.com/questions/4896223/how-to-get-an-uri-of-an-image-resource-in-android/38340580
-        boardRepository.insertBoard(new Board(title, ("android.resource://com.ang.acb.personalpins/R.drawable.ic_dashboard_24dp")));
+        Resources resources = context.getResources();
+        return new Uri.Builder()
+                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                .authority(resources.getResourcePackageName(resourceId))
+                .appendPath(resources.getResourceTypeName(resourceId))
+                .appendPath(resources.getResourceEntryName(resourceId))
+                .build();
     }
 }
