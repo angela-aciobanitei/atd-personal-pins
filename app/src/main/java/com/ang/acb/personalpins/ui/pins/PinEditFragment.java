@@ -94,7 +94,6 @@ public class PinEditFragment extends Fragment {
     }
 
     private void displayPhoto(View view) {
-        // binding.pinEditPhoto.setImageURI(pinUri);
         Glide.with(view.getContext()).load(pinUri).into(binding.pinEditPhoto);
     }
 
@@ -151,14 +150,15 @@ public class PinEditFragment extends Fragment {
 
     private void handleSaveButton() {
         binding.pinEditSaveBtn.setOnClickListener(view -> {
-            if (!pinTitle.isEmpty()) {
+            if (pinTitle != null && !pinTitle.isEmpty()) {
                 // Save result into the database.
                 if(isVideo) pinsViewModel.createPin(new Pin(pinTitle, null, pinUri.toString()));
                 else pinsViewModel.createPin(new Pin(pinTitle, pinUri.toString(), null));
                 // Navigate back to pin list fragment.
                 Navigation.findNavController(view).popBackStack(R.id.pins, false);
             } else {
-                Toast.makeText(getActivity(),"Please enter a pin title", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.enter_pin_title),
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -166,7 +166,7 @@ public class PinEditFragment extends Fragment {
     private void handleCancelButton() {
         binding.pinEditCancelBtn.setOnClickListener(view -> {
             // Navigate back to pin list fragment.
-            Navigation.findNavController(view).popBackStack(R.id.pins, true);
+            Navigation.findNavController(view).popBackStack(R.id.pins, false);
         });
     }
 

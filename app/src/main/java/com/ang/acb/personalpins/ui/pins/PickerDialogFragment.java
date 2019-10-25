@@ -1,6 +1,7 @@
 package com.ang.acb.personalpins.ui.pins;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 
 import com.ang.acb.personalpins.R;
 import com.ang.acb.personalpins.ui.common.MainActivity;
@@ -42,6 +44,10 @@ public class PickerDialogFragment extends DialogFragment {
 
     private Uri pinUri;
     private boolean isVideo;
+    private Button takePhotoBtn;
+    private Button pickPhotoBtn;
+    private Button recordVideoBtn;
+    private Button pickVideoBtn;
 
     // Required empty public constructor
     public PickerDialogFragment() {}
@@ -52,6 +58,10 @@ public class PickerDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_picker_dialog, container, false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        takePhotoBtn = view.findViewById(R.id.take_photo_btn);
+        pickPhotoBtn = view.findViewById(R.id.pick_photo_btn);
+        recordVideoBtn = view.findViewById(R.id.record_video_btn);
+        pickVideoBtn = view.findViewById(R.id.pick_video_btn);
         return view;
     }
 
@@ -59,19 +69,19 @@ public class PickerDialogFragment extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        getDialog().findViewById(R.id.take_photo_btn).setOnClickListener(takePhoto -> {
+        takePhotoBtn.setOnClickListener(takePhoto -> {
             takePhoto();
         });
 
-        getDialog().findViewById(R.id.pick_photo_btn).setOnClickListener(pickPhoto -> {
+        pickPhotoBtn.setOnClickListener(pickPhoto -> {
             pickPhoto();
         });
 
-        getDialog().findViewById(R.id.pick_video_btn).setOnClickListener(pickVideo -> {
+        pickVideoBtn.setOnClickListener(pickVideo -> {
             pickVideo();
         });
 
-        getDialog().findViewById(R.id.record_video).setOnClickListener(recordVideo -> {
+        recordVideoBtn.setOnClickListener(recordVideo -> {
             recordVideo();
         });
     }
@@ -88,7 +98,6 @@ public class PickerDialogFragment extends DialogFragment {
     private void pickVideo() {
         Intent pickVideoIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         pickVideoIntent.setType("video/*");
-        // See: https://stackoverflow.com/questions/6147884/onactivityresult-is-not-being-called-in-fragment
         if (pickVideoIntent.resolveActivity(getHostActivity().getPackageManager()) != null) {
             startActivityForResult(pickVideoIntent, REQUEST_PICK_VIDEO);
         }
@@ -164,24 +173,20 @@ public class PickerDialogFragment extends DialogFragment {
             switch (requestCode) {
                 case REQUEST_TAKE_PHOTO:
                     isVideo = false;
-                    getDialog().dismiss();
                     navigateToPinEditFragment();
                     break;
                 case REQUEST_PICK_PHOTO:
                     isVideo = false;
                     if (data != null) pinUri = data.getData();
-                    getDialog().dismiss();
                     navigateToPinEditFragment();
                     break;
                 case REQUEST_TAKE_VIDEO:
                     isVideo = true;
-                    getDialog().dismiss();
                     navigateToPinEditFragment();
                     break;
                 case REQUEST_PICK_VIDEO:
                     isVideo = true;
                     if (data != null) pinUri = data.getData();
-                    getDialog().dismiss();
                     navigateToPinEditFragment();
                     break;
             }

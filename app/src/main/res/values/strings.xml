@@ -25,8 +25,8 @@
     <string name="pin_details_photo">Pin Details Photo</string>
     <string name="pin_details_tags_label">Tags</string>
     <string name="pin_details_comments_label">Comments</string>
-    <string name="new_tag">NEW TAG</string>
-    <string name="new_comment">NEW COMMENT</string>
+    <string name="new_tag">ADD TAG</string>
+    <string name="new_comment">ADD COMMENT</string>
     <string name="tag_name">Tag name</string>
     <string name="comment_text">Comment Text</string>
     <string name="new_pin">NEW PIN</string>
@@ -39,8 +39,7 @@
     <string name="pin_edit_video_play_button">Pin Details Video Play Button</string>
     <string name="pin_name">Pin name</string>
     <string name="pin_edit_save_btn_text">Save</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="enter_pin_title">Please enter a pin title</string>
+    <string name="pin_cover">Pin Item Cover</string>
 
 </resources>

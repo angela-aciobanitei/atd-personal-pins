@@ -21,13 +21,4 @@ public class BindingAdapters {
         if (isVisible) view.setVisibility(View.VISIBLE);
         else view.setVisibility(View.GONE);
     }
-
-    @BindingAdapter({"imageUri"})
-    // See: https://stackoverflow.com/questions/32332003/glide-load-local-image-by-uri
-    public static void bindImage(ImageView imageView, String imageUri) {
-        GlideApp.with(imageView.getContext())
-                .load(R.color.colorAccent)
-                .placeholder(R.color.colorAccent)
-                .into(imageView);
-    }
 }

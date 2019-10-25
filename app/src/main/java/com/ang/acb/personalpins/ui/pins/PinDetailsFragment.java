@@ -3,12 +3,11 @@ package com.ang.acb.personalpins.ui.pins;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -24,6 +23,7 @@ import android.widget.TextView;
 import com.ang.acb.personalpins.R;
 import com.ang.acb.personalpins.databinding.FragmentPinDetailsBinding;
 import com.ang.acb.personalpins.ui.common.MainActivity;
+import com.bumptech.glide.Glide;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -94,10 +94,45 @@ public class PinDetailsFragment extends Fragment {
     private void observePin() {
         pinDetailsViewModel.getPin().observe(getViewLifecycleOwner(), pin -> {
             if (pin != null) {
+                setToolbarTitle(pin.getTitle());
+
                 binding.setPin(pin);
+
+                if (pin.getPhotoUri() != null) {
+                    displayPhoto(pin.getPhotoUri());
+                } else if (pin.getVideoUri() != null) {
+                    playVideo(pin.getVideoUri());
+                }
+
                 binding.executePendingBindings();
             }
         });
+    }
+
+    private void displayPhoto(String photoUriString) {
+        binding.pinDetailsPhoto.setImageURI(Uri.parse(photoUriString));
+    }
+
+    private void playVideo(String videoUriString) {
+        binding.pinDetailsVideoView.setVideoURI(Uri.parse(videoUriString));
+        binding.pinDetailsVideoPlayBtn.setOnClickListener(view -> {
+            if (binding.pinDetailsVideoView.isPlaying()){
+                binding.pinDetailsVideoView.pause();
+                binding.pinDetailsVideoPlayBtn.setVisibility(View.VISIBLE);
+            } else {
+                binding.pinDetailsVideoView.start();
+                binding.pinDetailsVideoPlayBtn.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        binding.pinDetailsVideoView.setOnCompletionListener(mediaPlayer ->
+                binding.pinDetailsVideoPlayBtn.setVisibility(View.VISIBLE));
+    }
+
+    private void setToolbarTitle(String title) {
+        if (getHostActivity().getSupportActionBar() != null) {
+            getHostActivity().getSupportActionBar().setTitle(title);
+        }
     }
 
     private void observeTags() {
@@ -144,77 +179,65 @@ public class PinDetailsFragment extends Fragment {
     }
 
     private void createNewTagDialog() {
-        MainActivity activity = getHostActivity();
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
-        View dialogView = activity.getLayoutInflater()
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        View dialogView = getHostActivity().getLayoutInflater()
                 .inflate(R.layout.create_new_dialog, null);
         dialogBuilder.setView(dialogView);
 
+        AlertDialog dialog = dialogBuilder.create();
+
         // Set title
-        TextView title = dialogView.findViewById(R.id.dialog_title);
+        TextView title = dialogView.findViewById(R.id.dialog_new_title);
         title.setText(R.string.new_tag);
 
-        // Setup dialog buttons
-        final EditText editText = dialogView.findViewById(R.id.dialog_edit_text);
+        // Set edit text hint
+        final EditText editText = dialogView.findViewById(R.id.dialog_new_edit_text);
         editText.setHint(R.string.tag_name);
-        dialogBuilder.setPositiveButton(R.string.dialog_pos_button, (dialog, whichButton) -> {
+
+        Button saveButton = dialogView.findViewById(R.id.dialog_new_save_btn);
+        saveButton.setOnClickListener(view -> {
             String input = editText.getText().toString();
             if (input.trim().length() != 0) pinDetailsViewModel.createTag(pinId, input);
-            else dialog.dismiss();
+            dialog.dismiss();
         });
-        dialogBuilder.setNegativeButton(R.string.dialog_neg_button, (dialog, whichButton) ->
-                dialog.cancel()
-        );
 
-        AlertDialog dialog = dialogBuilder.create();
+        Button cancelButton = dialogView.findViewById(R.id.dialog_new_cancel_btn);
+        cancelButton.setOnClickListener(view -> {
+            dialog.cancel();
+        });
+
         dialog.show();
-
-        // Customize dialog buttons
-        Button posBtn = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        posBtn.setBackgroundColor(ContextCompat.getColor(activity, android.R.color.transparent));
-        posBtn.setTextColor(ContextCompat.getColor(activity,R.color.colorAccent));
-        posBtn.setPadding(16, 0, 16, 0);
-        Button negBtn = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-        negBtn.setBackgroundColor(ContextCompat.getColor(activity, android.R.color.transparent));
-        negBtn.setTextColor(ContextCompat.getColor(activity,R.color.colorAccent));
-        negBtn.setPadding(16, 0, 16, 0);
     }
 
     private void createNewCommentDialog() {
-        MainActivity activity = getHostActivity();
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
-        View dialogView = activity.getLayoutInflater()
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        View dialogView = getHostActivity().getLayoutInflater()
                 .inflate(R.layout.create_new_dialog, null);
         dialogBuilder.setView(dialogView);
 
+        AlertDialog dialog = dialogBuilder.create();
+
         // Set title
-        TextView title = dialogView.findViewById(R.id.dialog_title);
+        TextView title = dialogView.findViewById(R.id.dialog_new_title);
         title.setText(R.string.new_comment);
 
-        // Setup dialog buttons
-        final EditText editText = dialogView.findViewById(R.id.dialog_edit_text);
+        // Set edit text hint
+        final EditText editText = dialogView.findViewById(R.id.dialog_new_edit_text);
         editText.setHint(R.string.comment_text);
-        dialogBuilder.setPositiveButton(R.string.dialog_pos_button, (dialog, whichButton) -> {
+
+        Button saveButton = dialogView.findViewById(R.id.dialog_new_save_btn);
+        saveButton.setOnClickListener(view -> {
             String input = editText.getText().toString();
             if (input.trim().length() != 0) pinDetailsViewModel.createComment(pinId, input);
-            else dialog.dismiss();
+            dialog.dismiss();
         });
-        dialogBuilder.setNegativeButton(R.string.dialog_neg_button, (dialog, whichButton) ->
-                dialog.cancel()
-        );
 
-        AlertDialog dialog = dialogBuilder.create();
+        Button cancelButton = dialogView.findViewById(R.id.dialog_new_cancel_btn);
+        cancelButton.setOnClickListener(view -> {
+            dialog.cancel();
+        });
+
         dialog.show();
-
-        // Customize dialog buttons
-        Button posBtn = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        posBtn.setBackgroundColor(ContextCompat.getColor(activity, android.R.color.transparent));
-        posBtn.setTextColor(ContextCompat.getColor(activity,R.color.colorAccent));
-        posBtn.setPadding(16, 0, 16, 0);
-        Button negBtn = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-        negBtn.setBackgroundColor(ContextCompat.getColor(activity, android.R.color.transparent));
-        negBtn.setTextColor(ContextCompat.getColor(activity,R.color.colorAccent));
-        negBtn.setPadding(16, 0, 16, 0);
     }
 
     private MainActivity getHostActivity(){

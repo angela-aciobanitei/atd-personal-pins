@@ -1,5 +1,6 @@
 package com.ang.acb.personalpins.ui.pins;
 
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ang.acb.personalpins.data.entity.Pin;
 import com.ang.acb.personalpins.databinding.PinItemBinding;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -72,6 +74,18 @@ public class PinsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void bindTo(Pin pin) {
             // Bind data for this item.
             binding.setPin(pin);
+
+            // Handle pin cover
+            if (pin.getPhotoUri() != null) {
+                Glide.with(itemView.getContext())
+                        .load(Uri.parse(pin.getPhotoUri()))
+                        .into(binding.pinItemCover);
+            } else if (pin.getVideoUri() != null) {
+                binding.pinItemVideoView.setVideoURI(Uri.parse(pin.getVideoUri()));
+                // See: https://stackoverflow.com/questions/17079593/how-to-set-the-preview-image-in-videoview-before-playing
+                binding.pinItemVideoView.pause();
+                binding.pinItemVideoView.seekTo(100);
+            }
 
             // Binding must be executed immediately.
             binding.executePendingBindings();

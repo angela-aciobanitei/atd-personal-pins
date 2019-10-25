@@ -111,7 +111,7 @@ public class BoardsFragment extends Fragment {
     }
 
     private void handleNewBoardCreation() {
-        binding.fabCreateNewBoard.setOnClickListener(view -> {
+        binding.newBoardButton.setOnClickListener(view -> {
             createNewBoardDialog();
         });
 
@@ -124,33 +124,29 @@ public class BoardsFragment extends Fragment {
                 .inflate(R.layout.create_new_dialog, null);
         dialogBuilder.setView(dialogView);
 
+        AlertDialog dialog = dialogBuilder.create();
+
         // Set title
-        TextView title = dialogView.findViewById(R.id.dialog_title);
+        TextView title = dialogView.findViewById(R.id.dialog_new_title);
         title.setText(R.string.new_board);
 
-        // Setup dialog buttons
-        final EditText editText = dialogView.findViewById(R.id.dialog_edit_text);
+        // Set edit text hint
+        final EditText editText = dialogView.findViewById(R.id.dialog_new_edit_text);
         editText.setHint(R.string.board_name);
-        dialogBuilder.setPositiveButton(R.string.dialog_pos_button, (dialog, whichButton) -> {
+
+        Button saveButton = dialogView.findViewById(R.id.dialog_new_save_btn);
+        saveButton.setOnClickListener(view -> {
             String input = editText.getText().toString();
             if (input.trim().length() != 0) boardsViewModel.createBoard(input);
-            else dialog.dismiss();
+            dialog.dismiss();
         });
-        dialogBuilder.setNegativeButton(R.string.dialog_neg_button, (dialog, whichButton) ->
-                dialog.cancel());
 
-        AlertDialog dialog = dialogBuilder.create();
+        Button cancelButton = dialogView.findViewById(R.id.dialog_new_cancel_btn);
+        cancelButton.setOnClickListener(view -> {
+            dialog.cancel();
+        });
+
         dialog.show();
-
-        // Customize dialog buttons
-        Button posBtn = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        posBtn.setBackgroundColor(ContextCompat.getColor(activity, android.R.color.transparent));
-        posBtn.setTextColor(ContextCompat.getColor(activity,R.color.colorAccent));
-        posBtn.setPadding(16, 0, 16, 0);
-        Button negBtn = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-        negBtn.setBackgroundColor(ContextCompat.getColor(activity, android.R.color.transparent));
-        negBtn.setTextColor(ContextCompat.getColor(activity,R.color.colorAccent));
-        negBtn.setPadding(16, 0, 16, 0);
     }
 
     private MainActivity getHostActivity(){

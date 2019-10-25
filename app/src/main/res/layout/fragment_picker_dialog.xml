@@ -2,7 +2,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <Button
         style="@style/Widget.AppCompat.Button.Borderless"
@@ -15,7 +16,7 @@
     <Button
         style="@style/Widget.AppCompat.Button.Borderless"
         android:id="@+id/pick_photo_btn"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/pick_photo"
         android:textColor="@color/colorAccent"/>
@@ -23,7 +24,7 @@
     <Button
         style="@style/Widget.AppCompat.Button.Borderless"
         android:id="@+id/record_video_btn"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/record_video"
         android:textColor="@color/colorAccent"/>
@@ -31,7 +32,7 @@
     <Button
         style="@style/Widget.AppCompat.Button.Borderless"
         android:id="@+id/pick_video_btn"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/pick_video"
         android:textColor="@color/colorAccent"/>

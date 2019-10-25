@@ -36,12 +36,12 @@
         </action>
     </fragment>
 
-    <!-- Navigate from pin list to pin details (and back/up) -->
     <fragment
         android:id="@+id/pins"
         android:label="@string/pins"
         android:name="com.ang.acb.personalpins.ui.pins.PinsFragment"
         tools:layout="@layout/fragment_pin_list">
+        <!-- Navigate from pin list to pin details (and back/up) -->
         <action
             android:id="@+id/action_pin_list_to_pin_details"
             app:destination="@id/pin_details"
@@ -50,23 +50,11 @@
                 android:name="pinId"
                 app:argType="long" />
         </action>
-
+        <!-- Navigate from pin list to picker dialog fragment -->
         <action
             android:id="@+id/action_pin_list_to_picker_dialog"
             app:destination="@id/picker_dialog"
             app:popUpTo="@+id/pins">
-        </action>
-
-        <action
-            android:id="@+id/action_pin_list_to_pin_edit"
-            app:destination="@id/pin_edit"
-            app:popUpTo="@+id/pins">
-            <argument
-                android:name="pinUriString"
-                app:argType="string" />
-            <argument
-                android:name="isVideo"
-                app:argType="boolean" />
         </action>
     </fragment>
 
@@ -82,7 +70,7 @@
         tools:layout="@layout/fragment_pin_edit">
     </fragment>
 
-    <fragment
+    <dialog
         android:id="@+id/picker_dialog"
         android:name="com.ang.acb.personalpins.ui.pins.PickerDialogFragment"
         tools:layout="@layout/fragment_picker_dialog">
@@ -97,6 +85,6 @@
                 android:name="isVideo"
                 app:argType="boolean" />
         </action>
-    </fragment>
+    </dialog>
 
 </navigation>
