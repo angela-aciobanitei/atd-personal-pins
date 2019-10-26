@@ -36,6 +36,7 @@ public class Pin {
 
     @Ignore
     private List<Tag> tagList;
+
     @Ignore
     private List<Comment> commentList;
 

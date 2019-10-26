@@ -94,15 +94,10 @@ public class PinDetailsFragment extends Fragment {
     private void observePin() {
         pinDetailsViewModel.getPin().observe(getViewLifecycleOwner(), pin -> {
             if (pin != null) {
-                setToolbarTitle(pin.getTitle());
-
                 binding.setPin(pin);
 
-                if (pin.getPhotoUri() != null) {
-                    displayPhoto(pin.getPhotoUri());
-                } else if (pin.getVideoUri() != null) {
-                    playVideo(pin.getVideoUri());
-                }
+                if(pin.getPhotoUri() != null) displayPhoto(pin.getPhotoUri());
+                else if(pin.getVideoUri() != null) playVideo(pin.getVideoUri());
 
                 binding.executePendingBindings();
             }
@@ -127,12 +122,6 @@ public class PinDetailsFragment extends Fragment {
 
         binding.pinDetailsVideoView.setOnCompletionListener(mediaPlayer ->
                 binding.pinDetailsVideoPlayBtn.setVisibility(View.VISIBLE));
-    }
-
-    private void setToolbarTitle(String title) {
-        if (getHostActivity().getSupportActionBar() != null) {
-            getHostActivity().getSupportActionBar().setTitle(title);
-        }
     }
 
     private void observeTags() {

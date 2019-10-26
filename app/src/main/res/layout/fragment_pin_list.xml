@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable name="allPinsCount" type="int"/>
@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/vertical_margin"
@@ -22,27 +23,20 @@
             <Button
                 android:id="@+id/new_pin_button"
                 android:text="@string/new_pin"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                style="@style/newButtonStyle"/>
+                style="@style/createButtonStyle"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_all_pins"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/new_pin_button"
+                app:toggleVisibility="@{allPinsCount != 0}"
                 style="@style/listStyle" />
 
             <TextView
                 android:id="@+id/all_pins_empty_state"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/new_pin_button"
-                app:toggleVisibility="@{allPinsCount == 0}" />
+                app:toggleVisibility="@{allPinsCount == 0}"
+                tools:text="@string/no_pins"
+                style="@style/emptyStateTextStyle"/>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </ScrollView>
 </layout>

@@ -1,12 +1,17 @@
 package com.ang.acb.personalpins.ui.common;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.ang.acb.personalpins.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -48,8 +53,18 @@ public class MainActivity extends AppCompatActivity  implements HasSupportFragme
         // See: https://github.com/Levi-Moreira/TeamManagerApp
         BottomNavigationView bottomNavigationView = findViewById(R.id.main_bottom_navigation);
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+        ActionBar actionBar = getSupportActionBar();
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if (destination.getId() == R.id.pin_details || destination.getId() == R.id.pin_edit) {
+                if(actionBar != null) actionBar.hide();
+            } else {
+                if(actionBar != null) actionBar.show();
+            }
+        });
+
         NavigationUI.setupActionBarWithNavController(this, navController);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
 
     @Override

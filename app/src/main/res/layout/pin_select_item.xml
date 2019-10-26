@@ -13,9 +13,6 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
         app:cardCornerRadius="8dp"
         tools:layout_width="160dp">
 
@@ -24,7 +21,7 @@
             android:layout_height="wrap_content">
 
             <VideoView
-                android:id="@+id/pin_item_video_view"
+                android:id="@+id/pin_select_item_video_view"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
@@ -35,19 +32,19 @@
                 app:toggleVisibility="@{pin.videoUri != null}"/>
 
             <ImageView
-                android:id="@+id/pin_item_video_play_btn"
+                android:id="@+id/pin_select_item_video_play_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/video_play_button"
                 android:src="@drawable/ic_play_circle_outline"
-                app:layout_constraintStart_toStartOf="@id/pin_item_video_view"
-                app:layout_constraintEnd_toEndOf="@id/pin_item_video_view"
-                app:layout_constraintTop_toTopOf="@id/pin_item_video_view"
-                app:layout_constraintBottom_toBottomOf="@id/pin_item_video_view"
+                app:layout_constraintStart_toStartOf="@id/pin_select_item_video_view"
+                app:layout_constraintEnd_toEndOf="@id/pin_select_item_video_view"
+                app:layout_constraintTop_toTopOf="@id/pin_select_item_video_view"
+                app:layout_constraintBottom_toBottomOf="@id/pin_select_item_video_view"
                 app:toggleVisibility="@{pin.videoUri != null}"/>
 
             <ImageView
-                android:id="@+id/pin_item_cover"
+                android:id="@+id/pin_select_item_cover"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
@@ -63,23 +60,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="pin_item_video_view,pin_item_cover" />
+                app:constraint_referenced_ids="pin_select_item_video_view,pin_select_item_cover" />
 
             <TextView
-                android:id="@+id/pin_item_title"
-                android:layout_width="wrap_content"
+                android:id="@+id/pin_select_item_title"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:gravity="center"
+                android:gravity="start"
                 android:maxLines="1"
                 android:padding="8dp"
                 android:text="@{pin.title}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/barrier"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/select_pin_checkbox"
                 tools:text="@tools:sample/lorem"/>
+
+            <CheckBox
+                android:id="@+id/select_pin_checkbox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/barrier"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>

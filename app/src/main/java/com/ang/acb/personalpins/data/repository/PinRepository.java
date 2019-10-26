@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import com.ang.acb.personalpins.data.db.AppDatabase;
 import com.ang.acb.personalpins.data.entity.Board;
+import com.ang.acb.personalpins.data.entity.BoardPin;
 import com.ang.acb.personalpins.data.entity.Comment;
 import com.ang.acb.personalpins.data.entity.Pin;
 import com.ang.acb.personalpins.data.entity.Tag;
@@ -78,7 +79,21 @@ public class PinRepository {
                 -> database.commentDao().deleteById(id));
     }
 
+    public void insertBoardPin(long boardId, long pinId) {
+        executors.diskIO().execute(() ->
+                database.boardPinDao().insert(new BoardPin(boardId, pinId)));
+    }
+
+    public void deleteBoardPin(long boardId, long pinId){
+        executors.diskIO().execute(() ->
+                database.boardPinDao().deleteByIds(boardId,pinId));
+    }
+
     public LiveData<List<Board>> getBoardsForPin(long pinId) {
         return database.boardPinDao().getBoardsForPin(pinId);
+    }
+
+    public LiveData<List<Pin>> getPinsForBoard(long boardId) {
+        return database.boardPinDao().getPinsForBoard(boardId);
     }
 }

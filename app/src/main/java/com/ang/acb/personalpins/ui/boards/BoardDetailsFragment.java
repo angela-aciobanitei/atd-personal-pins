@@ -77,6 +77,7 @@ public class BoardDetailsFragment extends Fragment {
         initAdapter();
         observeBoard();
         observePins();
+        onAddPins();
     }
 
     private void initViewModel() {
@@ -121,6 +122,16 @@ public class BoardDetailsFragment extends Fragment {
             else binding.boardDetailsEmptyState.setText(R.string.no_board_pins);
 
             binding.executePendingBindings();
+        });
+    }
+
+    private void onAddPins() {
+        binding.addPinsButton.setOnClickListener(view -> {
+            // Navigate to pin select fragment and pass the board ID as bundle arg.
+            Bundle args = new Bundle();
+            args.putLong(ARG_BOARD_ID, boardId);
+            NavHostFragment.findNavController(BoardDetailsFragment.this)
+                    .navigate(R.id.action_board_details_to_pin_select, args);
         });
     }
 

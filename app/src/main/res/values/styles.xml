@@ -8,16 +8,9 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="newButtonStyle" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/colorAccent</item>
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body2</item>
-        <item name="android:padding">8dp</item>
-        <item name="android:drawableTint">@color/colorAccent</item>
-        <item name="android:drawableStart">@drawable/ic_add_24dp</item>
-        <item name="android:drawablePadding">4dp</item>
-    </style>
+    <!--Toolbar themes. -->
+    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 
     <style name="listStyle">
         <item name="android:layout_width">match_parent</item>
@@ -25,6 +18,13 @@
         <item name="android:clipToPadding">false</item>
         <item name="android:nestedScrollingEnabled">false</item>
         <item name="android:padding">@dimen/item_offset</item>
+    </style>
+
+    <style name="emptyStateTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="createButtonStyle" parent="Widget.AppCompat.Button.Borderless">
@@ -35,7 +35,7 @@
     </style>
 
     <style name="pinDetailsLabelStyle">
-        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/vertical_margin</item>
         <item name="android:textStyle">bold</item>
@@ -55,5 +55,15 @@
         <item name="android:layout_width">200dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="createNewDialogButtonStyle" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:layout_marginTop">@dimen/vertical_margin</item>
+        <item name="android:layout_marginBottom">@dimen/vertical_margin</item>
+    </style>
+
 </resources>

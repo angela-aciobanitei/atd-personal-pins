@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/vertical_margin"
+    android:paddingBottom="@dimen/vertical_margin"
+    android:paddingStart="@dimen/horizontal_margin"
+    android:paddingEnd="@dimen/horizontal_margin">
 
     <TextView
         android:id="@+id/dialog_new_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:paddingBottom="@dimen/vertical_margin"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@android:color/black"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,9 +27,6 @@
         android:id="@+id/dialog_new_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:inputType="text"
         android:importantForAutofill="no"
@@ -35,27 +37,17 @@
         tools:ignore="LabelFor" />
 
     <Button
-        style="@style/Widget.AppCompat.Button.Borderless"
         android:id="@+id/dialog_new_cancel_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="@string/cancel"
-        android:textColor="@color/colorAccent"
-        android:layout_marginTop="@dimen/vertical_margin"
-        android:layout_marginBottom="@dimen/vertical_margin"
         app:layout_constraintEnd_toStartOf="@id/dialog_new_save_btn"
-        app:layout_constraintTop_toBottomOf="@id/dialog_new_edit_text"/>
+        app:layout_constraintTop_toBottomOf="@id/dialog_new_edit_text"
+        style="@style/createNewDialogButtonStyle"/>
 
     <Button
-        style="@style/Widget.AppCompat.Button.Borderless"
         android:id="@+id/dialog_new_save_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="@string/save"
-        android:textColor="@color/colorAccent"
-        android:layout_marginTop="@dimen/vertical_margin"
-        android:layout_marginBottom="@dimen/vertical_margin"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dialog_new_edit_text"/>
+        app:layout_constraintTop_toBottomOf="@id/dialog_new_edit_text"
+        style="@style/createNewDialogButtonStyle"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

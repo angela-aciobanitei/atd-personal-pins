@@ -21,9 +21,9 @@
 
         <TextView
             android:id="@+id/pin_details_title"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{pin.title}"
+            android:text="@{pin.title.toUpperCase()}"
             android:textStyle="bold"
             android:textColor="@android:color/black"
             app:layout_constraintTop_toTopOf="parent"

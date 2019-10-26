@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable name="boardsCount" type="int"/>
@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/vertical_margin"
@@ -22,27 +23,20 @@
             <Button
                 android:id="@+id/new_board_button"
                 android:text="@string/new_board"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                style="@style/newButtonStyle"/>
+                style="@style/createButtonStyle"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_boards"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/new_board_button"
+                app:toggleVisibility="@{boardsCount != 0}"
                 style="@style/listStyle"/>
 
             <TextView
                 android:id="@+id/boards_empty_state"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/new_board_button"
-                app:toggleVisibility="@{boardsCount == 0}" />
+                app:toggleVisibility="@{boardsCount == 0}"
+                tools:text="@string/no_boards"
+                style="@style/emptyStateTextStyle" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </ScrollView>
 

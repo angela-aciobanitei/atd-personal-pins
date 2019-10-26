@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="allPinsCount" type="int"/>
+    </data>
+
+    <FrameLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:layout_marginBottom="@dimen/vertical_margin"
+        android:layout_marginStart="@dimen/horizontal_margin"
+        android:layout_marginEnd="@dimen/horizontal_margin">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_all_pins"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:toggleVisibility="@{allPinsCount != 0}" />
+
+        <TextView
+            android:id="@+id/all_pins_empty_state"
+            app:toggleVisibility="@{allPinsCount == 0}"
+            tools:text="@string/no_pins"
+            style="@style/emptyStateTextStyle"/>
+
+    </FrameLayout>
+
+</layout>

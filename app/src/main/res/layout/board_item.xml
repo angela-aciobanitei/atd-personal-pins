@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="board"
             type="com.ang.acb.personalpins.data.entity.Board" />
@@ -17,6 +16,7 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="8dp"
         tools:layout_width="160dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,9 +41,8 @@
                 android:layout_height="52dp"
                 android:ellipsize="end"
                 android:gravity="center"
-                android:maxLines="2"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
+                android:maxLines="1"
+                android:padding="8dp"
                 android:text="@{board.title}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                 app:layout_constraintBottom_toBottomOf="parent"
