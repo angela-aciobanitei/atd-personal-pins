@@ -47,6 +47,11 @@ public class BoardRepository {
                 -> database.boardDao().insertBoard(board));
     }
 
+    public void updateBoardCover(String photoCoverUri, long boardId) {
+        executors.diskIO().execute(()
+                -> database.boardDao().updateBoardCover(photoCoverUri, boardId));
+    }
+
     public void deleteBoard(long id) {
         executors.diskIO().execute(()
                 -> database.boardDao().deleteById(id));

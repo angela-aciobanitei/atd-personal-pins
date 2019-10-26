@@ -124,10 +124,10 @@ public class PinDetailsFragment extends Fragment {
     }
 
     private void observeTags() {
-        binding.pinPartialInfo.rvTags.setLayoutManager(new LinearLayoutManager(
+        binding.rvTags.setLayoutManager(new LinearLayoutManager(
                 getContext(), LinearLayoutManager.HORIZONTAL, false));
         tagsAdapter =  new TagsAdapter();
-        binding.pinPartialInfo.rvTags.setAdapter(tagsAdapter);
+        binding.rvTags.setAdapter(tagsAdapter);
 
         pinDetailsViewModel.getPinTags().observe(getViewLifecycleOwner(), tags -> {
             if(tags != null) tagsAdapter.submitList(tags);
@@ -136,11 +136,10 @@ public class PinDetailsFragment extends Fragment {
     }
 
     private void observeComments() {
-        binding.pinPartialInfo.rvComments.setLayoutManager(new LinearLayoutManager(
-                getContext(), LinearLayoutManager.VERTICAL, false));
-
+        binding.rvComments.setLayoutManager(new LinearLayoutManager(
+                getContext(), LinearLayoutManager.HORIZONTAL, false));
         commentsAdapter = new CommentsAdapter();
-        binding.pinPartialInfo.rvComments.setAdapter(commentsAdapter);
+        binding.rvComments.setAdapter(commentsAdapter);
 
         pinDetailsViewModel.getPinComments().observe(getViewLifecycleOwner(), comments -> {
             if(comments != null) commentsAdapter.submitList(comments);
@@ -149,13 +148,13 @@ public class PinDetailsFragment extends Fragment {
     }
 
     private void createNewTag() {
-        binding.pinPartialInfo.newTagTv.setOnClickListener(view -> {
+        binding.newTagTv.setOnClickListener(view -> {
             createNewTagDialog();
         });
     }
 
     private void createNewComment() {
-        binding.pinPartialInfo.newCommentTv.setOnClickListener(view -> {
+        binding.newCommentTv.setOnClickListener(view -> {
             createNewCommentDialog();
         });
     }

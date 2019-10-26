@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import com.ang.acb.personalpins.R;
 import com.ang.acb.personalpins.data.entity.Pin;
 import com.ang.acb.personalpins.databinding.FragmentPinSelectBinding;
+import com.ang.acb.personalpins.ui.boards.BoardsViewModel;
 import com.ang.acb.personalpins.ui.common.MainActivity;
 import com.ang.acb.personalpins.utils.GridMarginDecoration;
 import com.google.android.material.snackbar.Snackbar;
@@ -38,6 +39,7 @@ public class SelectPinsFragment extends Fragment {
 
     private FragmentPinSelectBinding binding;
     private PinsViewModel pinsViewModel;
+    private BoardsViewModel boardsViewModel;
     private SelectPinsAdapter selectPinsAdapter;
     private long boardId;
 
@@ -75,15 +77,17 @@ public class SelectPinsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        initViewModel();
+        initViewModels();
         initAdapter();
         populateUi();
     }
 
-    private void initViewModel() {
+    private void initViewModels() {
         pinsViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(PinsViewModel.class);
-        pinsViewModel.setBoardId(boardId);
+        boardsViewModel = ViewModelProviders.of(this, viewModelFactory)
+                .get(BoardsViewModel.class);
+        boardsViewModel.setBoardId(boardId);
     }
 
     private void initAdapter() {
@@ -102,7 +106,7 @@ public class SelectPinsFragment extends Fragment {
         });
 
         binding.rvAllPins.setLayoutManager(new GridLayoutManager(
-                getHostActivity(), getResources().getInteger(R.integer.span_count)));
+                getHostActivity(), getResources().getInteger(R.integer.columns_3)));
         binding.rvAllPins.addItemDecoration(new GridMarginDecoration(
                 getHostActivity(), R.dimen.item_offset));
         binding.rvAllPins.setAdapter(selectPinsAdapter);
@@ -114,13 +118,15 @@ public class SelectPinsFragment extends Fragment {
             int allPinsCount = (allPins == null) ? 0 : allPins.size();
             binding.setAllPinsCount(allPinsCount);
 
-            if(allPinsCount == 0) {
+            if(allPins == null) {
                 binding.allPinsEmptyState.setText(R.string.no_pins);
             } else {
                 // Get pins associated with this particular board.
-                pinsViewModel.getPinsForBoard().observe(getViewLifecycleOwner(), boardPins -> {
+                boardsViewModel.getPinsForBoard().observe(getViewLifecycleOwner(), boardPins -> {
                     if (boardPins != null) {
                         selectPinsAdapter.updateData(allPins, getPinStates(allPins, boardPins));
+                        // FIXME: IndexOutOfBoundsException: Index: 0, Size: 0
+                        // boardsViewModel.updateBoardCover(boardPins.get(0).getPhotoUri(), boardId);
                         binding.executePendingBindings();
                     }
                 });

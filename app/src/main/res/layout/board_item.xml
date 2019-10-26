@@ -28,7 +28,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
-                app:layout_constraintDimensionRatio="W,3:2"
+                app:layout_constraintDimensionRatio="W,2:3"
                 android:contentDescription="@string/board_cover"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

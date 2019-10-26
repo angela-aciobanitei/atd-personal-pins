@@ -90,7 +90,7 @@ public class BoardDetailsFragment extends Fragment {
         pinsAdapter = new PinsAdapter(this::onPinClick);
         binding.rvBoardPins.setAdapter(pinsAdapter);
         binding.rvBoardPins.setLayoutManager(new GridLayoutManager(
-                getHostActivity(), getResources().getInteger(R.integer.span_count)));
+                getHostActivity(), getResources().getInteger(R.integer.columns_3)));
         binding.rvBoardPins.addItemDecoration(new GridMarginDecoration(
                 getHostActivity(), R.dimen.item_offset));
     }

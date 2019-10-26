@@ -21,7 +21,6 @@ public class PinsViewModel extends ViewModel {
     private PinRepository pinRepository;
     private LiveData<List<Pin>> allPins;
     private final MutableLiveData<Long> pinId = new MutableLiveData<>();
-    private final MutableLiveData<Long> boardId = new MutableLiveData<>();
     private final SnackbarMessage snackbarMessage = new SnackbarMessage();
 
     @Inject
@@ -31,17 +30,6 @@ public class PinsViewModel extends ViewModel {
 
     public void setPinId(long value) {
         pinId.setValue(value);
-    }
-
-    public void setBoardId(long value) {
-        boardId.setValue(value);
-    }
-
-    public LiveData<List<Pin>> getPinsForBoard() {
-        return Transformations.switchMap(boardId, id -> {
-            if (id == null) return AbsentLiveData.create();
-            else return pinRepository.getPinsForBoard(id);
-        });
     }
 
     public LiveData<List<Board>> getBoardsForPin() {

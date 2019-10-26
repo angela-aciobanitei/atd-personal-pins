@@ -15,6 +15,7 @@ import com.ang.acb.personalpins.data.entity.Board;
 import com.ang.acb.personalpins.data.entity.Pin;
 import com.ang.acb.personalpins.data.repository.BoardRepository;
 import com.ang.acb.personalpins.utils.AbsentLiveData;
+import com.ang.acb.personalpins.utils.UiUtils;
 
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class BoardsViewModel extends ViewModel {
 
     private BoardRepository boardRepository;
     private LiveData<List<Board>> allBoards;
+    private final MutableLiveData<Long> boardId = new MutableLiveData<>();
 
     @Inject
     public BoardsViewModel(BoardRepository boardRepository) {
@@ -43,20 +45,26 @@ public class BoardsViewModel extends ViewModel {
         return allBoards;
     }
 
-    public void createBoard(Context context, String title) {
-        // Set default board image with fixed image.
-        boardRepository.insertBoard(new Board(title,
-                getImageResourceUri(context, R.drawable.board).toString()));
+    public void setBoardId(long value) {
+        boardId.setValue(value);
     }
 
-    private Uri getImageResourceUri(Context context, int resourceId) {
-        // https://stackoverflow.com/questions/4896223/how-to-get-an-uri-of-an-image-resource-in-android/38340580
-        Resources resources = context.getResources();
-        return new Uri.Builder()
-                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                .authority(resources.getResourcePackageName(resourceId))
-                .appendPath(resources.getResourceTypeName(resourceId))
-                .appendPath(resources.getResourceEntryName(resourceId))
-                .build();
+    public LiveData<List<Pin>> getPinsForBoard() {
+        return Transformations.switchMap(boardId, id -> {
+            if (id == null) return AbsentLiveData.create();
+            else return boardRepository.getPinsForBoard(id);
+        });
     }
+
+    public void createBoard(Context context, String title) {
+        // Set default board image with fixed image.
+        boardRepository.insertBoard(new Board(title, UiUtils.getImageResourceUri(
+                context, R.drawable.board_cool).toString()));
+    }
+
+    public void updateBoardCover(String photoCoverUri, long boardId) {
+        boardRepository.updateBoardCover(photoCoverUri, boardId);
+    }
+
+
 }
