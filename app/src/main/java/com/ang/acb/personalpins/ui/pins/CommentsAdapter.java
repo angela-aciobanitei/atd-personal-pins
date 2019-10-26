@@ -11,7 +11,7 @@ import com.ang.acb.personalpins.databinding.CommentItemBinding;
 
 import java.util.List;
 
-public class PinCommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Comment> comments;
 

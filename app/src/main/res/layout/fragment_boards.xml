@@ -28,7 +28,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_boards"
                 app:toggleVisibility="@{boardsCount != 0}"
-                style="@style/listStyle"/>
+                style="@style/gridStyle"/>
 
             <TextView
                 android:id="@+id/boards_empty_state"

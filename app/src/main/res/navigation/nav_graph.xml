@@ -38,7 +38,7 @@
         <!-- Navigate from board details to pin select (and back/up) -->
         <action
             android:id="@+id/action_board_details_to_pin_select"
-            app:destination="@id/pin_select"
+            app:destination="@id/select_pins"
             app:popUpTo="@+id/board_details">
             <argument
                 android:name="boardId"
@@ -76,9 +76,9 @@
     </fragment>
 
     <fragment
-        android:id="@+id/pin_select"
+        android:id="@+id/select_pins"
         android:label="@string/pin_select"
-        android:name="com.ang.acb.personalpins.ui.pins.PinSelectFragment"
+        android:name="com.ang.acb.personalpins.ui.pins.SelectPinsFragment"
         tools:layout="@layout/fragment_pin_select">
     </fragment>
 

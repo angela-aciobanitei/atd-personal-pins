@@ -4,7 +4,7 @@ import com.ang.acb.personalpins.ui.boards.BoardDetailsFragment;
 import com.ang.acb.personalpins.ui.boards.BoardsFragment;
 import com.ang.acb.personalpins.ui.pins.PinDetailsFragment;
 import com.ang.acb.personalpins.ui.pins.PinEditFragment;
-import com.ang.acb.personalpins.ui.pins.PinSelectFragment;
+import com.ang.acb.personalpins.ui.pins.SelectPinsFragment;
 import com.ang.acb.personalpins.ui.pins.PinsFragment;
 
 import dagger.Module;
@@ -23,7 +23,7 @@ abstract class FragmentBuildersModule {
     abstract PinsFragment contributePinsFragment();
 
     @ContributesAndroidInjector
-    abstract PinSelectFragment contributePinSelectFragment();
+    abstract SelectPinsFragment contributePinSelectFragment();
 
     @ContributesAndroidInjector
     abstract PinDetailsFragment contributePinDetailsFragment();

@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PinSelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SelectPinsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     // Keeps track of all existing pins.
     private List<Pin> pins = new ArrayList<>();
@@ -25,7 +25,7 @@ public class PinSelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private PinSelectCallback checkedCallback;
 
-    PinSelectAdapter(PinSelectCallback checkedCallback) {
+    SelectPinsAdapter(PinSelectCallback checkedCallback) {
         this.checkedCallback = checkedCallback;
     }
 

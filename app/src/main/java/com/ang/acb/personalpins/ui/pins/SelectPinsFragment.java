@@ -10,8 +10,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.util.LongSparseArray;
@@ -21,7 +19,6 @@ import android.view.ViewGroup;
 
 import com.ang.acb.personalpins.R;
 import com.ang.acb.personalpins.data.entity.Pin;
-import com.ang.acb.personalpins.databinding.FragmentPinListBinding;
 import com.ang.acb.personalpins.databinding.FragmentPinSelectBinding;
 import com.ang.acb.personalpins.ui.common.MainActivity;
 import com.ang.acb.personalpins.utils.GridMarginDecoration;
@@ -35,20 +32,20 @@ import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 
-public class PinSelectFragment extends Fragment {
+public class SelectPinsFragment extends Fragment {
 
     public static final String ARG_BOARD_ID = "ARG_BOARD_ID";
 
     private FragmentPinSelectBinding binding;
     private PinsViewModel pinsViewModel;
-    private PinSelectAdapter pinSelectAdapter;
+    private SelectPinsAdapter selectPinsAdapter;
     private long boardId;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
     // Required empty public constructor
-    public PinSelectFragment() {}
+    public SelectPinsFragment() {}
 
     @Override
     public void onAttach(@NotNull Context context) {
@@ -90,7 +87,7 @@ public class PinSelectFragment extends Fragment {
     }
 
     private void initAdapter() {
-        pinSelectAdapter = new PinSelectAdapter(new PinSelectAdapter.PinSelectCallback() {
+        selectPinsAdapter = new SelectPinsAdapter(new SelectPinsAdapter.PinSelectCallback() {
             @Override
             public void onPinChecked(Pin pin) {
                 // Save the result into the database and show a snackbar message.
@@ -108,7 +105,7 @@ public class PinSelectFragment extends Fragment {
                 getHostActivity(), getResources().getInteger(R.integer.span_count)));
         binding.rvAllPins.addItemDecoration(new GridMarginDecoration(
                 getHostActivity(), R.dimen.item_offset));
-        binding.rvAllPins.setAdapter(pinSelectAdapter);
+        binding.rvAllPins.setAdapter(selectPinsAdapter);
     }
 
     private void populateUi() {
@@ -123,7 +120,7 @@ public class PinSelectFragment extends Fragment {
                 // Get pins associated with this particular board.
                 pinsViewModel.getPinsForBoard().observe(getViewLifecycleOwner(), boardPins -> {
                     if (boardPins != null) {
-                        pinSelectAdapter.updateData(allPins, getPinStates(allPins, boardPins));
+                        selectPinsAdapter.updateData(allPins, getPinStates(allPins, boardPins));
                         binding.executePendingBindings();
                     }
                 });

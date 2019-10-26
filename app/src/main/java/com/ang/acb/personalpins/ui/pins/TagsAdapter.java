@@ -11,7 +11,7 @@ import com.ang.acb.personalpins.databinding.TagItemBinding;
 
 import java.util.List;
 
-public class PinTagsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TagsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Tag> tags;
 

@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
@@ -23,7 +24,6 @@ import android.widget.TextView;
 import com.ang.acb.personalpins.R;
 import com.ang.acb.personalpins.databinding.FragmentPinDetailsBinding;
 import com.ang.acb.personalpins.ui.common.MainActivity;
-import com.bumptech.glide.Glide;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -38,13 +38,12 @@ public class PinDetailsFragment extends Fragment {
 
     private FragmentPinDetailsBinding binding;
     private PinDetailsViewModel pinDetailsViewModel;
-    private PinTagsAdapter tagsAdapter;
-    private PinCommentsAdapter commentsAdapter;
+    private TagsAdapter tagsAdapter;
+    private CommentsAdapter commentsAdapter;
     private long pinId;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
-
 
     // Required empty public constructor
     public PinDetailsFragment() {}
@@ -125,44 +124,38 @@ public class PinDetailsFragment extends Fragment {
     }
 
     private void observeTags() {
-        tagsAdapter =  new PinTagsAdapter();
-        binding.pinPartialInfo.rvTags.setAdapter(tagsAdapter);
         binding.pinPartialInfo.rvTags.setLayoutManager(new LinearLayoutManager(
                 getContext(), LinearLayoutManager.HORIZONTAL, false));
+        tagsAdapter =  new TagsAdapter();
+        binding.pinPartialInfo.rvTags.setAdapter(tagsAdapter);
 
         pinDetailsViewModel.getPinTags().observe(getViewLifecycleOwner(), tags -> {
-            binding.setTagsCount((tags == null) ? 0 : tags.size());
-            if(tags != null) {
-                tagsAdapter.submitList(tags);
-            }
-
+            if(tags != null) tagsAdapter.submitList(tags);
             binding.executePendingBindings();
         });
     }
 
     private void observeComments() {
-        commentsAdapter = new PinCommentsAdapter();
-        binding.pinPartialInfo.rvComments.setAdapter(commentsAdapter);
         binding.pinPartialInfo.rvComments.setLayoutManager(new LinearLayoutManager(
                 getContext(), LinearLayoutManager.VERTICAL, false));
 
-        pinDetailsViewModel.getPinComments().observe(getViewLifecycleOwner(), comments -> {
-            int commentsCount = (comments == null) ? 0 : comments.size();
-            binding.setCommentsCount(commentsCount);
-            if(commentsCount != 0) commentsAdapter.submitList(comments);
+        commentsAdapter = new CommentsAdapter();
+        binding.pinPartialInfo.rvComments.setAdapter(commentsAdapter);
 
+        pinDetailsViewModel.getPinComments().observe(getViewLifecycleOwner(), comments -> {
+            if(comments != null) commentsAdapter.submitList(comments);
             binding.executePendingBindings();
         });
     }
 
     private void createNewTag() {
-        binding.pinPartialInfo.newTagButton.setOnClickListener(view -> {
+        binding.pinPartialInfo.newTagTv.setOnClickListener(view -> {
             createNewTagDialog();
         });
     }
 
     private void createNewComment() {
-        binding.pinPartialInfo.newCommentButton.setOnClickListener(view -> {
+        binding.pinPartialInfo.newCommentTv.setOnClickListener(view -> {
             createNewCommentDialog();
         });
     }
@@ -186,7 +179,9 @@ public class PinDetailsFragment extends Fragment {
         Button saveButton = dialogView.findViewById(R.id.dialog_new_save_btn);
         saveButton.setOnClickListener(view -> {
             String input = editText.getText().toString();
-            if (input.trim().length() != 0) pinDetailsViewModel.createTag(pinId, input);
+            if (input.trim().length() != 0) {
+                pinDetailsViewModel.createTag(pinId, input);
+            }
             dialog.dismiss();
         });
 
@@ -217,7 +212,9 @@ public class PinDetailsFragment extends Fragment {
         Button saveButton = dialogView.findViewById(R.id.dialog_new_save_btn);
         saveButton.setOnClickListener(view -> {
             String input = editText.getText().toString();
-            if (input.trim().length() != 0) pinDetailsViewModel.createComment(pinId, input);
+            if (input.trim().length() != 0) {
+                pinDetailsViewModel.createComment(pinId, input);
+            }
             dialog.dismiss();
         });
 

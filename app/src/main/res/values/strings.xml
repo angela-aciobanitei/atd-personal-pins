@@ -21,11 +21,13 @@
     <string name="no_boards">No boards created yet</string>
     <string name="no_pins">No pins created yet</string>
     <string name="pin_photo">Pin Details Photo</string>
+    <string name="pin_title">TITLE: <b>%s</b></string>
     <string name="pin_tags_label">TAGS</string>
     <string name="pin_comments_label">COMMENTS</string>
     <string name="new_tag">CREATE TAG</string>
     <string name="new_comment">CREATE COMMENT</string>
     <string name="tag_name">Tag name</string>
+    <string name="tag_text">#<b>%s</b></string>
     <string name="comment_text">Comment Text</string>
     <string name="new_pin">CREATE PIN</string>
 

@@ -5,11 +5,4 @@
          returned by Environment.getExternalStorageDirectory(). -->
     <!-- See: https://developer.android.com/reference/androidx/core/content/FileProvider#SpecifyFiles -->
     <external-path name="external_files" path="."/>
-
-    <external-media-path name="media" android:path="@{string/app_name}/" />
-
-    <!-- Represents files in the files/ subdirectory of your app's
-         internal storage area. This subdirectory is the same as the
-         value returned by Context.getFilesDir(). -->
-    <files-path name="files" path="."/>
 </paths>
