@@ -1,7 +1,6 @@
 package com.ang.acb.personalpins.ui.pins;
 
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,7 +32,7 @@ import static com.ang.acb.personalpins.ui.pins.PinsFragment.ARG_PIN_IS_VIDEO;
 import static com.ang.acb.personalpins.ui.pins.PinsFragment.ARG_PIN_URI;
 
 
-public class PickerDialogFragment extends DialogFragment {
+public class CreatePinDialog extends DialogFragment {
 
     public static final int REQUEST_TAKE_PHOTO = 103;
     public static final int REQUEST_TAKE_VIDEO = 104;
@@ -50,7 +49,7 @@ public class PickerDialogFragment extends DialogFragment {
     private Button pickVideoBtn;
 
     // Required empty public constructor
-    public PickerDialogFragment() {}
+    public CreatePinDialog() {}
 
 
     @Nullable
@@ -198,8 +197,8 @@ public class PickerDialogFragment extends DialogFragment {
         Bundle args = new Bundle();
         args.putString(ARG_PIN_URI, pinUriString);
         args.putBoolean(ARG_PIN_IS_VIDEO, isVideo);
-        NavHostFragment.findNavController(PickerDialogFragment.this)
-                .navigate(R.id.action_picker_dialog_to_pin_edit, args);
+        NavHostFragment.findNavController(CreatePinDialog.this)
+                .navigate(R.id.action_create_pin_dialog_to_pin_edit, args);
     }
 
     private MainActivity getHostActivity(){

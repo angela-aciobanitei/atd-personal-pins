@@ -34,24 +34,29 @@ public class Pin {
     @ColumnInfo(name = "video_uri")
     private String videoUri;
 
+    @ColumnInfo(name = "is_favorite")
+    private boolean isFavorite;
+
     @Ignore
     private List<Tag> tagList;
 
     @Ignore
     private List<Comment> commentList;
 
-    public Pin(long id, String title, @Nullable String photoUri, @Nullable String videoUri) {
+    public Pin(long id, String title, @Nullable String photoUri, @Nullable String videoUri, boolean isFavorite) {
         this.id = id;
         this.title = title;
         this.photoUri = photoUri;
         this.videoUri = videoUri;
+        this.isFavorite = isFavorite;
     }
 
     @Ignore
-    public Pin(String title, @Nullable String photoUri, @Nullable String videoUri) {
+    public Pin(String title, @Nullable String photoUri, @Nullable String videoUri, boolean isFavorite) {
         this.title = title;
         this.photoUri = photoUri;
         this.videoUri = videoUri;
+        this.isFavorite = isFavorite;
     }
 
     public long getId() {
@@ -86,6 +91,14 @@ public class Pin {
 
     public void setVideoUri(@Nullable String videoUri) {
         this.videoUri = videoUri;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 
     public List<Tag> getTagList() {

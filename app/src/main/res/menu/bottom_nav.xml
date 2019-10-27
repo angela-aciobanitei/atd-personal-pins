@@ -11,4 +11,9 @@
         android:title="@string/pins"
         android:icon="@drawable/ic_collections" />
 
+    <item
+        android:id="@+id/favorites"
+        android:title="@string/favorites"
+        android:icon="@drawable/ic_favorite" />
+
 </menu>

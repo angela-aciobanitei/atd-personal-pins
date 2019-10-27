@@ -9,10 +9,10 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.ang.acb.personalpins.R;
 import com.ang.acb.personalpins.databinding.FragmentPinDetailsBinding;
 import com.ang.acb.personalpins.ui.common.MainActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -79,8 +80,9 @@ public class PinDetailsFragment extends Fragment {
         initViewModel();
         observePin();
         observeTags();
-        createNewTag();
-        createNewComment();
+        handleFavorite();
+        handleNewTag();
+        handleNewComment();
         viewComments();
     }
 
@@ -94,7 +96,7 @@ public class PinDetailsFragment extends Fragment {
         pinDetailsViewModel.getPin().observe(getViewLifecycleOwner(), pin -> {
             if (pin != null) {
                 binding.setPin(pin);
-
+                pinDetailsViewModel.setFavorite(pin.isFavorite());
                 if(pin.getPhotoUri() != null) displayPhoto(pin.getPhotoUri());
                 else if(pin.getVideoUri() != null) playVideo(pin.getVideoUri());
 
@@ -135,13 +137,24 @@ public class PinDetailsFragment extends Fragment {
         });
     }
 
-    private void createNewTag() {
+    private void handleFavorite() {
+        binding.icAddToFavorite.setOnClickListener(view -> {
+            pinDetailsViewModel.onFavoriteClicked();
+        });
+
+        // Observe the Snackbar messages displayed when adding/removing pin to/from favorites.
+        pinDetailsViewModel.getSnackbarMessage().observe(
+                getViewLifecycleOwner(), (Observer<Integer>) message ->
+                    Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_SHORT).show());
+    }
+
+    private void handleNewTag() {
         binding.icAddTag.setOnClickListener(view -> {
             createNewTagDialog();
         });
     }
 
-    private void createNewComment() {
+    private void handleNewComment() {
         binding.icAddComment.setOnClickListener(view -> {
             createNewCommentDialog();
         });

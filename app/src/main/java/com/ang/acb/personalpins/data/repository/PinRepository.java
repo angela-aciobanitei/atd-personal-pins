@@ -15,6 +15,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import timber.log.Timber;
+
 /**
  * Repository module for handling data operations.
  *
@@ -37,6 +39,10 @@ public class PinRepository {
         return database.pinDao().getAllPins();
     }
 
+    public LiveData<List<Pin>> getAllFavoritePins() {
+        return database.pinDao().getAllFavoritePins();
+    }
+
     public LiveData<Pin> getPinById(long id){
         return database.pinDao().getPinById(id);
     }
@@ -54,24 +60,38 @@ public class PinRepository {
                 -> database.pinDao().insertPin(pin));
     }
 
-    public void insertTag(Tag tag) {
-        executors.diskIO().execute(()
-                -> database.tagDao().insertTag(tag));
-    }
-
-    public void insertComment(Comment comment) {
-        executors.diskIO().execute(()
-                -> database.commentDao().insertComment(comment));
-    }
-
     public void deletePin(long id) {
         executors.diskIO().execute(()
                 -> database.pinDao().deleteById(id));
     }
 
+    public void markAsFavorite(final Pin pin) {
+        executors.diskIO().execute(() -> {
+            Timber.d("Adding pin to favorites");
+            database.pinDao().markAsFavorite(pin.getId());
+        });
+    }
+
+    public void markAsNotFavorite(final Pin pin) {
+        executors.diskIO().execute(() -> {
+            Timber.d("Removing pin from favorites");
+            database.pinDao().markAsNotFavorite(pin.getId());
+        });
+    }
+
+    public void insertTag(Tag tag) {
+        executors.diskIO().execute(()
+                -> database.tagDao().insertTag(tag));
+    }
+
     public void deleteTag(long id) {
         executors.diskIO().execute(()
                 -> database.tagDao().deleteById(id));
+    }
+
+    public void insertComment(Comment comment) {
+        executors.diskIO().execute(()
+                -> database.commentDao().insertComment(comment));
     }
 
     public void deleteComment(long id) {

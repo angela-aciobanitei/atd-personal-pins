@@ -30,7 +30,7 @@ public interface BoardPinDao {
             "AND boardPin.pinId = :pinId")
     void deleteByIds(long boardId, long pinId);
 
-    @Query("SELECT id, pin_title, photo_uri, video_uri FROM pin " +
+    @Query("SELECT id, pin_title, photo_uri, video_uri, is_favorite FROM pin " +
             "INNER JOIN boardPin " +
             "ON pin.id = boardPin.pinId " +
             "WHERE boardPin.boardId = :boardId")

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#7E53C5</color>
-    <color name="control_background">#cc4285f4</color>
+    <color name="colorPrimary">#FF0000</color>
+    <color name="colorPrimaryDark">#D50000</color>
+    <color name="colorAccent">#065FD4</color>
     <color name="colorImagePlaceholder">#FFE0E0E0</color>
     <color name="colorGrey700">#616161</color>
     <color name="colorGrey600">#757575</color>

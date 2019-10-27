@@ -21,7 +21,7 @@ import com.ang.acb.personalpins.data.entity.Tag;
  * See: https://medium.com/androiddevelopers/7-pro-tips-for-room-fbadea4bfbd1
  */
 @Database(entities = {Board.class, Pin.class, Tag.class, Comment.class, BoardPin.class},
-          version = 2,
+          version = 3,
           exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 

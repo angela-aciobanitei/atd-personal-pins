@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
@@ -19,8 +18,8 @@ import android.view.ViewGroup;
 
 import com.ang.acb.personalpins.R;
 import com.ang.acb.personalpins.data.entity.Pin;
+import com.ang.acb.personalpins.databinding.FragmentFavoritePinsBinding;
 import com.ang.acb.personalpins.databinding.FragmentPinListBinding;
-import com.ang.acb.personalpins.ui.common.MainActivity;
 import com.ang.acb.personalpins.utils.GridMarginDecoration;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,14 +28,11 @@ import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 
+import static com.ang.acb.personalpins.ui.pins.PinsFragment.ARG_PIN_ID;
 
-public class PinsFragment extends Fragment {
+public class FavoritePinsFragment extends Fragment {
 
-    public static final String ARG_PIN_ID = "ARG_PIN_ID";
-    public static final String ARG_PIN_URI = "ARG_PIN_URI";
-    public static final String ARG_PIN_IS_VIDEO = "ARG_PIN_IS_VIDEO";
-
-    private FragmentPinListBinding binding;
+    private FragmentFavoritePinsBinding binding;
     private PinsViewModel pinsViewModel;
     private PinsAdapter pinsAdapter;
 
@@ -44,7 +40,7 @@ public class PinsFragment extends Fragment {
     ViewModelProvider.Factory viewModelFactory;
 
     // Required empty public constructor
-    public PinsFragment() {}
+    public FavoritePinsFragment() {}
 
     @Override
     public void onAttach(@NotNull Context context) {
@@ -57,7 +53,7 @@ public class PinsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment and get an instance of the binding class.
-        binding = FragmentPinListBinding.inflate(inflater, container, false);
+        binding = FragmentFavoritePinsBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -68,7 +64,6 @@ public class PinsFragment extends Fragment {
         initViewModel();
         initAdapter();
         populateUi();
-        onCreateNewPin();
     }
 
     private void initViewModel() {
@@ -78,38 +73,31 @@ public class PinsFragment extends Fragment {
 
     private void initAdapter() {
         pinsAdapter = new PinsAdapter(this::onPinClick);
-        binding.rvAllPins.setLayoutManager(new GridLayoutManager(
+        binding.rvFavorites.setLayoutManager(new GridLayoutManager(
                 getContext(), getResources().getInteger(R.integer.columns_3)));
-        binding.rvAllPins.addItemDecoration(new GridMarginDecoration(
+        binding.rvFavorites.addItemDecoration(new GridMarginDecoration(
                 getContext(), R.dimen.item_offset));
-        binding.rvAllPins.setAdapter(pinsAdapter);
+        binding.rvFavorites.setAdapter(pinsAdapter);
     }
 
     private void onPinClick(Pin pin) {
         // On item click navigate to pin details fragment
         Bundle args = new Bundle();
         args.putLong(ARG_PIN_ID, pin.getId());
-        NavHostFragment.findNavController(PinsFragment.this)
-                .navigate(R.id.action_pin_list_to_pin_details, args);
+        NavHostFragment.findNavController(FavoritePinsFragment.this)
+                .navigate(R.id.action_favorite_pins_to_pin_details, args);
     }
 
     private void populateUi() {
-        pinsViewModel.getAllPins().observe(getViewLifecycleOwner(), pins -> {
-            int allPinsCount = (pins == null) ? 0 : pins.size();
-            binding.setAllPinsCount(allPinsCount);
+        pinsViewModel.getAllFavoritePins().observe(getViewLifecycleOwner(), pins -> {
+            int favoritesCount = (pins == null) ? 0 : pins.size();
+            binding.setFavoritesCount(favoritesCount);
 
-            if(allPinsCount != 0) pinsAdapter.submitList(pins);
-            else binding.allPinsEmptyState.setText(R.string.no_pins);
+            if(favoritesCount != 0) pinsAdapter.submitList(pins);
+            else binding.favoritesEmptyState.setText(R.string.no_favorites);
 
             binding.executePendingBindings();
         });
     }
 
-    private void onCreateNewPin() {
-        binding.newPinButton.setOnClickListener(view -> {
-            // Navigate to picker dialog fragment
-            // See: https://stackoverflow.com/questions/50311637/navigation-architecture-component-dialog-fragments
-            Navigation.findNavController(view).navigate(R.id.create_pin_dialog);
-        });
-    }
 }

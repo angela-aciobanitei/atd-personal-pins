@@ -155,8 +155,8 @@ public class PinEditFragment extends Fragment {
         binding.pinEditSaveBtn.setOnClickListener(view -> {
             if (pinTitle != null && !pinTitle.isEmpty()) {
                 // Save result into the database.
-                if(isVideo) pinsViewModel.createPin(new Pin(pinTitle, null, pinUri.toString()));
-                else pinsViewModel.createPin(new Pin(pinTitle, pinUri.toString(), null));
+                if(isVideo) pinsViewModel.createPin(new Pin(pinTitle, null, pinUri.toString(), false));
+                else pinsViewModel.createPin(new Pin(pinTitle, pinUri.toString(), null, false));
                 // Navigate back to pin list fragment.
                 Navigation.findNavController(view).popBackStack(R.id.pins, false);
             } else {

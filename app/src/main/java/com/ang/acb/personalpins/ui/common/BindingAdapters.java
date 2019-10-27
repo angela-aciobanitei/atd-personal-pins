@@ -6,7 +6,6 @@ import android.widget.ImageView;
 import androidx.databinding.BindingAdapter;
 
 import com.ang.acb.personalpins.R;
-import com.ang.acb.personalpins.utils.GlideApp;
 
 /**
  * Binding adapters are responsible for making the appropriate framework calls to set values.
@@ -20,5 +19,11 @@ public class BindingAdapters {
     public static void toggleVisibility(View view, Boolean isVisible) {
         if (isVisible) view.setVisibility(View.VISIBLE);
         else view.setVisibility(View.GONE);
+    }
+
+    @BindingAdapter("setFavoriteSrc")
+    public static void setFavoriteSrc(ImageView imageView, Boolean isFavorite) {
+        if (isFavorite) imageView.setImageResource(R.drawable.ic_favorite);
+        else imageView.setImageResource(R.drawable.ic_favorite_border);
     }
 }

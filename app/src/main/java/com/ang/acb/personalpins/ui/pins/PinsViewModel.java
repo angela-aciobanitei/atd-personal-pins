@@ -20,6 +20,7 @@ public class PinsViewModel extends ViewModel {
 
     private PinRepository pinRepository;
     private LiveData<List<Pin>> allPins;
+    private LiveData<List<Pin>> favoritePins;
     private final MutableLiveData<Long> pinId = new MutableLiveData<>();
     private final SnackbarMessage snackbarMessage = new SnackbarMessage();
 
@@ -48,6 +49,13 @@ public class PinsViewModel extends ViewModel {
             allPins = pinRepository.getAllPins();
         }
         return allPins;
+    }
+
+    public LiveData<List<Pin>> getAllFavoritePins() {
+        if (favoritePins == null) {
+            favoritePins = pinRepository.getAllFavoritePins();
+        }
+        return favoritePins;
     }
 
     public void createPin(Pin pin) {
