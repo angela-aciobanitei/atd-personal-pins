@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -39,7 +40,6 @@ public class PinDetailsFragment extends Fragment {
     private FragmentPinDetailsBinding binding;
     private PinDetailsViewModel pinDetailsViewModel;
     private TagsAdapter tagsAdapter;
-    private CommentsAdapter commentsAdapter;
     private long pinId;
 
     @Inject
@@ -79,9 +79,9 @@ public class PinDetailsFragment extends Fragment {
         initViewModel();
         observePin();
         observeTags();
-        observeComments();
         createNewTag();
         createNewComment();
+        viewComments();
     }
 
     private void initViewModel() {
@@ -135,26 +135,14 @@ public class PinDetailsFragment extends Fragment {
         });
     }
 
-    private void observeComments() {
-        binding.rvComments.setLayoutManager(new LinearLayoutManager(
-                getContext(), LinearLayoutManager.HORIZONTAL, false));
-        commentsAdapter = new CommentsAdapter();
-        binding.rvComments.setAdapter(commentsAdapter);
-
-        pinDetailsViewModel.getPinComments().observe(getViewLifecycleOwner(), comments -> {
-            if(comments != null) commentsAdapter.submitList(comments);
-            binding.executePendingBindings();
-        });
-    }
-
     private void createNewTag() {
-        binding.newTagTv.setOnClickListener(view -> {
+        binding.icAddTag.setOnClickListener(view -> {
             createNewTagDialog();
         });
     }
 
     private void createNewComment() {
-        binding.newCommentTv.setOnClickListener(view -> {
+        binding.icAddComment.setOnClickListener(view -> {
             createNewCommentDialog();
         });
     }
@@ -223,6 +211,16 @@ public class PinDetailsFragment extends Fragment {
         });
 
         dialog.show();
+    }
+
+    private void viewComments() {
+        binding.viewCommentsTv.setOnClickListener(view -> {
+            // Navigate to comments fragment and pass the pin ID as bundle arg.
+            Bundle args = new Bundle();
+            args.putLong(ARG_PIN_ID, pinId);
+            NavHostFragment.findNavController(PinDetailsFragment.this)
+                    .navigate(R.id.action_pin_details_to_comments, args);
+        });
     }
 
     private MainActivity getHostActivity(){

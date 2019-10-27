@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="commentsCount" type="int"/>
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.pins.CommentsFragment"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:layout_marginBottom="@dimen/vertical_margin"
+        android:layout_marginStart="@dimen/horizontal_margin"
+        android:layout_marginEnd="@dimen/horizontal_margin">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_comments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:toggleVisibility="@{commentsCount != 0}"/>
+
+        <TextView
+            android:id="@+id/comments_empty_state"
+            app:toggleVisibility="@{commentsCount == 0}"
+            tools:text="@string/no_comments"
+            style="@style/emptyStateTextStyle" />
+
+    </FrameLayout>
+</layout>

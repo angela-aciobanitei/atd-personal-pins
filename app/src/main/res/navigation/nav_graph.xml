@@ -66,6 +66,22 @@
         android:id="@+id/pin_details"
         android:name="com.ang.acb.personalpins.ui.pins.PinDetailsFragment"
         tools:layout="@layout/fragment_pin_details">
+        <!-- Navigate from pin details to comments (and back/up) -->
+        <action
+            android:id="@+id/action_pin_details_to_comments"
+            app:destination="@id/comments"
+            app:popUpTo="@+id/pin_details">
+            <argument
+                android:name="pinId"
+                app:argType="long" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/comments"
+        android:label="@string/comments"
+        android:name="com.ang.acb.personalpins.ui.pins.CommentsFragment"
+        tools:layout="@layout/fragment_comments">
     </fragment>
 
     <fragment

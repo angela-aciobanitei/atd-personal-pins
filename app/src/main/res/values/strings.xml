@@ -41,6 +41,14 @@
     <string name="pin_added_to_board">Pin added to this board</string>
     <string name="pin_removed_from_board">Pin removed from this board</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="view_comments">View comments</string>
+    <string name="add_to_favorites_icon">Add to favorites icon</string>
+    <string name="add_comment_icon">Add comment icon</string>
+    <string name="add_tag_icon">Add tag icon</string>
+    <string name="no_comments">No comments for this pin yet</string>
+    <string name="comments">Comments</string>
 
 
 </resources>
