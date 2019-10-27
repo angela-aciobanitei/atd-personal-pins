@@ -4,6 +4,7 @@ package com.ang.acb.personalpins.ui.pins;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -25,9 +26,19 @@ import android.widget.TextView;
 import com.ang.acb.personalpins.R;
 import com.ang.acb.personalpins.databinding.FragmentPinDetailsBinding;
 import com.ang.acb.personalpins.ui.common.MainActivity;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -38,10 +49,17 @@ import static com.ang.acb.personalpins.ui.pins.PinsFragment.ARG_PIN_ID;
 
 public class PinDetailsFragment extends Fragment {
 
+    private static final String CURRENT_PLAYBACK_POSITION_KEY = "CURRENT_PLAYBACK_POSITION_KEY";
+    private static final String SHOULD_PLAY_WHEN_READY_KEY = "SHOULD_PLAY_WHEN_READY_KEY";
+
     private FragmentPinDetailsBinding binding;
     private PinDetailsViewModel pinDetailsViewModel;
     private TagsAdapter tagsAdapter;
     private long pinId;
+
+    private SimpleExoPlayer simpleExoPlayer;
+    private boolean shouldPlayWhenReady;
+    private long currentPlaybackPosition;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -77,6 +95,7 @@ public class PinDetailsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        restoreInstanceState(savedInstanceState);
         initViewModel();
         observePin();
         observeTags();
@@ -84,6 +103,24 @@ public class PinDetailsFragment extends Fragment {
         handleNewTag();
         handleNewComment();
         viewComments();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(CURRENT_PLAYBACK_POSITION_KEY, currentPlaybackPosition);
+        outState.putBoolean(SHOULD_PLAY_WHEN_READY_KEY, shouldPlayWhenReady);
+    }
+
+    private void restoreInstanceState(Bundle savedInstanceState){
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(CURRENT_PLAYBACK_POSITION_KEY)) {
+                currentPlaybackPosition = savedInstanceState.getLong(CURRENT_PLAYBACK_POSITION_KEY);
+            }
+            if (savedInstanceState.containsKey(SHOULD_PLAY_WHEN_READY_KEY)) {
+                shouldPlayWhenReady = savedInstanceState.getBoolean(SHOULD_PLAY_WHEN_READY_KEY);
+            }
+        }
     }
 
     private void initViewModel() {
@@ -97,32 +134,83 @@ public class PinDetailsFragment extends Fragment {
             if (pin != null) {
                 binding.setPin(pin);
                 pinDetailsViewModel.setFavorite(pin.isFavorite());
-                if(pin.getPhotoUri() != null) displayPhoto(pin.getPhotoUri());
-                else if(pin.getVideoUri() != null) playVideo(pin.getVideoUri());
+                if(pin.getPhotoUri() != null && !pin.getPhotoUri().isEmpty()) {
+                    binding.pinDetailsPhoto.setImageURI(Uri.parse(pin.getPhotoUri()));
+                }
+                else if(pin.getVideoUri() != null && !pin.getVideoUri().isEmpty()) {
+                    initializePlayer(Uri.parse(pin.getVideoUri()));
+                }
 
                 binding.executePendingBindings();
             }
         });
     }
 
-    private void displayPhoto(String photoUriString) {
-        binding.pinDetailsPhoto.setImageURI(Uri.parse(photoUriString));
+    private void initializePlayer(Uri videoUri) {
+        // See: https://exoplayer.dev/hello-world
+        if (simpleExoPlayer == null) {
+            // Create the player using the ExoPlayerFactory.
+            simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(
+                    Objects.requireNonNull(getContext()));
+
+            // Attach the payer to the view.
+            binding.pinDetailsExoplayerView.setPlayer(simpleExoPlayer);
+        }
+
+        // Create a media source representing the media to be played.
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
+                Objects.requireNonNull(getContext()),
+                Util.getUserAgent(getContext(), getString(R.string.app_name)));
+        MediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
+                .createMediaSource(videoUri);
+
+        // Prepare the player.
+        simpleExoPlayer.prepare(mediaSource);
+
+        // Control the player.
+        simpleExoPlayer.seekTo(currentPlaybackPosition);
+        simpleExoPlayer.setPlayWhenReady(shouldPlayWhenReady);
     }
 
-    private void playVideo(String videoUriString) {
-        binding.pinDetailsVideoView.setVideoURI(Uri.parse(videoUriString));
-        binding.pinDetailsVideoPlayBtn.setOnClickListener(view -> {
-            if (binding.pinDetailsVideoView.isPlaying()){
-                binding.pinDetailsVideoView.pause();
-                binding.pinDetailsVideoPlayBtn.setVisibility(View.VISIBLE);
-            } else {
-                binding.pinDetailsVideoView.start();
-                binding.pinDetailsVideoPlayBtn.setVisibility(View.INVISIBLE);
-            }
-        });
+    private void releasePlayer() {
+        if (simpleExoPlayer != null) {
+            // Returns the playback position in the current content window
+            // or ad, in milliseconds.
+            currentPlaybackPosition = simpleExoPlayer.getCurrentPosition();
+            // Returns whether playback will proceed when ready (i.e. when
+            // Player.getPlaybackState() == Player.STATE_READY.)
+            shouldPlayWhenReady = simpleExoPlayer.getPlayWhenReady();
 
-        binding.pinDetailsVideoView.setOnCompletionListener(mediaPlayer ->
-                binding.pinDetailsVideoPlayBtn.setVisibility(View.VISIBLE));
+            simpleExoPlayer.stop();
+            simpleExoPlayer.release();
+            simpleExoPlayer = null;
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // See: https://www.raywenderlich.com/5573-media-playback-on-android-with-exoplayer-getting-started
+        // Release the player in onPause() if on Android Marshmallow and below.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // Release the player in onStop() if on Android Nougat and above
+        // because of the multi window support that was added in Android N.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            releasePlayer();
+        }
+    }
+
+    private void resetPlayer() {
+        shouldPlayWhenReady = true;
+        currentPlaybackPosition = 0;
+        if (simpleExoPlayer != null) simpleExoPlayer.stop();
     }
 
     private void observeTags() {

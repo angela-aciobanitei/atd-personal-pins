@@ -11,36 +11,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <VideoView
-            android:id="@+id/pin_details_video_view"
-            android:layout_width="0dp"
+        <com.google.android.exoplayer2.ui.PlayerView
+            android:id="@+id/pin_details_exoplayer_view"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:scaleType="centerCrop"
-            app:layout_constraintDimensionRatio="W,2:2"
+            app:layout_constraintDimensionRatio="H,7:8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:toggleVisibility="@{pin.videoUri != null}" />
 
         <ImageView
-            android:id="@+id/pin_details_video_play_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/video_play_button"
-            android:src="@drawable/ic_play_circle_outline"
-            app:layout_constraintBottom_toBottomOf="@id/pin_details_video_view"
-            app:layout_constraintEnd_toEndOf="@id/pin_details_video_view"
-            app:layout_constraintStart_toStartOf="@id/pin_details_video_view"
-            app:layout_constraintTop_toTopOf="@id/pin_details_video_view"
-            app:toggleVisibility="@{pin.videoUri != null}" />
-
-        <ImageView
             android:id="@+id/pin_details_photo"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:contentDescription="@string/pin_photo"
             android:scaleType="centerCrop"
-            app:layout_constraintDimensionRatio="W,2:2"
+            app:layout_constraintDimensionRatio="H,7:8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -51,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="pin_details_video_view,pin_details_photo" />
+            app:constraint_referenced_ids="pin_details_exoplayer_view,pin_details_photo" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier2"
@@ -67,6 +55,7 @@
             android:paddingStart="16dp"
             android:paddingTop="8dp"
             android:paddingEnd="8dp"
+            android:paddingBottom="8dp"
             android:contentDescription="@string/add_to_favorites_icon"
             android:tint="@color/colorPrimary"
             app:setFavoriteSrc="@{pin.isFavorite}"
@@ -84,6 +73,7 @@
             android:paddingStart="8dp"
             android:paddingTop="8dp"
             android:paddingEnd="8dp"
+            android:paddingBottom="8dp"
             android:contentDescription="@string/add_comment_icon"
             app:layout_constraintEnd_toStartOf="@+id/ic_add_tag"
             app:layout_constraintStart_toEndOf="@+id/ic_add_to_favorite"
@@ -96,6 +86,7 @@
             android:paddingStart="8dp"
             android:paddingTop="8dp"
             android:paddingEnd="8dp"
+            android:paddingBottom="8dp"
             android:src="@drawable/ic_tag"
             android:tint="@color/colorPrimary"
             android:contentDescription="@string/add_tag_icon"
@@ -107,7 +98,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/horizontal_margin"
-            android:layout_marginTop="@dimen/vertical_margin"
             android:layout_marginEnd="@dimen/horizontal_margin"
             android:paddingBottom="8dp"
             android:text="@{@string/pin_title(pin.title)}"
@@ -134,7 +124,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/horizontal_margin"
-            android:layout_marginTop="@dimen/vertical_margin"
             android:layout_marginEnd="@dimen/horizontal_margin"
             android:layout_marginBottom="@dimen/vertical_margin"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"

@@ -61,4 +61,20 @@
         <item name="android:layout_marginBottom">@dimen/vertical_margin</item>
     </style>
 
+    <style name="CustomExoMediaButton">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:tint">@color/colorPrimary</item>
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+    </style>
+
+    <style name="CustomExoMediaButton.Play">
+        <item name="android:src">@drawable/ic_play_circle_filled</item>
+    </style>
+
+    <style name="CustomExoMediaButton.Pause">
+        <item name="android:src">@drawable/ic_pause_circle_filled</item>
+    </style>
+
 </resources>
