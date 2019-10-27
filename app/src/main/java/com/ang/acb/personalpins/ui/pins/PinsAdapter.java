@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ang.acb.personalpins.data.entity.Pin;
 import com.ang.acb.personalpins.databinding.PinItemBinding;
+import com.ang.acb.personalpins.utils.GlideApp;
 import com.bumptech.glide.Glide;
 
 import java.util.List;

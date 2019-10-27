@@ -3,6 +3,7 @@ package com.ang.acb.personalpins.ui.pins;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,8 +27,17 @@ import com.ang.acb.personalpins.R;
 import com.ang.acb.personalpins.data.entity.Pin;
 import com.ang.acb.personalpins.databinding.FragmentPinEditBinding;
 import com.bumptech.glide.Glide;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -38,11 +48,18 @@ import static com.ang.acb.personalpins.ui.pins.PinsFragment.ARG_PIN_URI;
 
 public class PinEditFragment extends Fragment {
 
+    private static final String CURRENT_PLAYBACK_POSITION_KEY = "CURRENT_PLAYBACK_POSITION_KEY";
+    private static final String SHOULD_PLAY_WHEN_READY_KEY = "SHOULD_PLAY_WHEN_READY_KEY";
+
     private FragmentPinEditBinding binding;
     private PinsViewModel pinsViewModel;
     private String pinTitle;
     private Uri pinUri;
     private boolean isVideo;
+
+    private SimpleExoPlayer simpleExoPlayer;
+    private boolean shouldPlayWhenReady;
+    private long currentPlaybackPosition;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -76,44 +93,104 @@ public class PinEditFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(CURRENT_PLAYBACK_POSITION_KEY, currentPlaybackPosition);
+        outState.putBoolean(SHOULD_PLAY_WHEN_READY_KEY, shouldPlayWhenReady);
+    }
+
+    private void restoreInstanceState(Bundle savedInstanceState){
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(CURRENT_PLAYBACK_POSITION_KEY)) {
+                currentPlaybackPosition = savedInstanceState.getLong(CURRENT_PLAYBACK_POSITION_KEY);
+            }
+            if (savedInstanceState.containsKey(SHOULD_PLAY_WHEN_READY_KEY)) {
+                shouldPlayWhenReady = savedInstanceState.getBoolean(SHOULD_PLAY_WHEN_READY_KEY);
+            }
+        }
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.setIsVideo(isVideo);
-
-        if (!isVideo) {
-            displayPhoto(view);
-        } else {
-            playVideo();
-        }
-
+        restoreInstanceState(savedInstanceState);
+        displayPhotoOrVideo();
         initNameInputListener();
         initViewModel();
         handleSaveButton();
         handleCancelButton();
     }
 
-    private void displayPhoto(View view) {
-        Glide.with(view.getContext()).load(pinUri).into(binding.pinEditPhoto);
+    private void displayPhotoOrVideo() {
+        binding.setIsVideo(isVideo);
+
+        if (!isVideo) {
+            binding.pinEditPhoto.setImageURI(pinUri);
+        } else {
+            initPlayer(pinUri);
+        }
     }
 
-    private void playVideo() {
-        binding.pinEditVideoView.setVideoURI(pinUri);
-        // Set the preview image in videoview before playing
-        binding.pinEditVideoView.pause();
-        binding.pinEditVideoView.seekTo(100);
-        binding.pinEditVideoPlayBtn.setOnClickListener(view -> {
-            if (binding.pinEditVideoView.isPlaying()){
-                binding.pinEditVideoView.pause();
-                binding.pinEditVideoPlayBtn.setVisibility(View.VISIBLE);
-            } else {
-                binding.pinEditVideoView.start();
-                binding.pinEditVideoPlayBtn.setVisibility(View.INVISIBLE);
-            }
-        });
+    private void initPlayer(Uri pinUri) {
+        // See: https://exoplayer.dev/hello-world
+        if (simpleExoPlayer == null) {
+            // Create the player using the ExoPlayerFactory.
+            simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(
+                    Objects.requireNonNull(getContext()));
 
-        binding.pinEditVideoView.setOnCompletionListener(mediaPlayer ->
-                binding.pinEditVideoPlayBtn.setVisibility(View.VISIBLE));
+            // Attach the payer to the view.
+            binding.pinEditExoplayerView.setPlayer(simpleExoPlayer);
+        }
+
+        // Create a media source representing the media to be played.
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
+                Objects.requireNonNull(getContext()),
+                Util.getUserAgent(getContext(), getString(R.string.app_name)));
+        MediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
+                .createMediaSource(pinUri);
+
+        // Prepare the player.
+        simpleExoPlayer.prepare(mediaSource);
+
+        // Control the player.
+        simpleExoPlayer.seekTo(currentPlaybackPosition);
+        simpleExoPlayer.setPlayWhenReady(shouldPlayWhenReady);
+    }
+
+    private void releasePlayer() {
+        if (simpleExoPlayer != null) {
+            // Returns the playback position in the current content window
+            // or ad, in milliseconds.
+            currentPlaybackPosition = simpleExoPlayer.getCurrentPosition();
+            // Returns whether playback will proceed when ready (i.e. when
+            // Player.getPlaybackState() == Player.STATE_READY.)
+            shouldPlayWhenReady = simpleExoPlayer.getPlayWhenReady();
+
+            simpleExoPlayer.stop();
+            simpleExoPlayer.release();
+            simpleExoPlayer = null;
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // See: https://www.raywenderlich.com/5573-media-playback-on-android-with-exoplayer-getting-started
+        // Release the player in onPause() if on Android Marshmallow and below.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // Release the player in onStop() if on Android Nougat and above
+        // because of the multi window support that was added in Android N.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            releasePlayer();
+        }
     }
 
     private void initNameInputListener() {
@@ -155,8 +232,15 @@ public class PinEditFragment extends Fragment {
         binding.pinEditSaveBtn.setOnClickListener(view -> {
             if (pinTitle != null && !pinTitle.isEmpty()) {
                 // Save result into the database.
-                if(isVideo) pinsViewModel.createPin(new Pin(pinTitle, null, pinUri.toString(), false));
-                else pinsViewModel.createPin(new Pin(pinTitle, pinUri.toString(), null, false));
+                if(isVideo) {
+                    pinsViewModel.createPin(new Pin(
+                            pinTitle, null, pinUri.toString(), false));
+                }
+                else {
+                    pinsViewModel.createPin(new Pin(
+                            pinTitle, pinUri.toString(), null, false));
+                }
+
                 // Navigate back to pin list fragment.
                 Navigation.findNavController(view).popBackStack(R.id.pins, false);
             } else {
