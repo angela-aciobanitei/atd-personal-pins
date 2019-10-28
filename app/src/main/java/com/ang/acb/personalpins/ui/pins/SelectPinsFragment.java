@@ -108,7 +108,7 @@ public class SelectPinsFragment extends Fragment {
         binding.rvAllPins.setLayoutManager(new GridLayoutManager(
                 getHostActivity(), getResources().getInteger(R.integer.columns_3)));
         binding.rvAllPins.addItemDecoration(new GridMarginDecoration(
-                getHostActivity(), R.dimen.item_offset));
+                getHostActivity(), R.dimen.grid_item_spacing));
         binding.rvAllPins.setAdapter(selectPinsAdapter);
     }
 

@@ -76,7 +76,7 @@ public class FavoritePinsFragment extends Fragment {
         binding.rvFavorites.setLayoutManager(new GridLayoutManager(
                 getContext(), getResources().getInteger(R.integer.columns_3)));
         binding.rvFavorites.addItemDecoration(new GridMarginDecoration(
-                getContext(), R.dimen.item_offset));
+                getContext(), R.dimen.grid_item_spacing));
         binding.rvFavorites.setAdapter(pinsAdapter);
     }
 

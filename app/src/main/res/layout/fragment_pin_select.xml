@@ -8,26 +8,25 @@
     </data>
 
     <FrameLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/vertical_margin"
-        android:layout_marginBottom="@dimen/vertical_margin"
-        android:layout_marginStart="@dimen/horizontal_margin"
-        android:layout_marginEnd="@dimen/horizontal_margin">
+        android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_all_pins"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/item_offset"
+            android:padding="@dimen/grid_item_spacing"
+            android:clipToPadding="false"
             app:toggleVisibility="@{allPinsCount != 0}" />
 
         <TextView
             android:id="@+id/all_pins_empty_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
             app:toggleVisibility="@{allPinsCount == 0}"
-            tools:text="@string/no_pins"
-            style="@style/emptyStateTextStyle"/>
+            tools:text="@string/no_pins" />
 
     </FrameLayout>
 

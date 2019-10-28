@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="horizontal_margin">16dp</dimen>
-    <dimen name="vertical_margin">16dp</dimen>
-    <dimen name="item_offset">4dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="fab_elevation">6dp</dimen>
+    <dimen name="padding_mini">4dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_normal">16dp</dimen>
+    <dimen name="padding_large">24dp</dimen>
+    <dimen name="margin_mini">4dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_normal">16dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
+
+    <dimen name="grid_item_spacing">3dp</dimen>
+
+    <dimen name="card_view_corner_radius">4dp</dimen>
+    <dimen name="video_play_button_size">56dp</dimen>
 </resources>

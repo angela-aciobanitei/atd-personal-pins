@@ -3,26 +3,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="@dimen/padding_normal">
 
     <Button
         android:id="@+id/take_photo_btn"
         android:text="@string/take_photo"
-        style="@style/pickerDialogButtonStyle"/>
+        style="@style/pickerDialogButton"/>
 
     <Button
         android:id="@+id/pick_photo_btn"
         android:text="@string/pick_photo"
-        style="@style/pickerDialogButtonStyle"/>
+        style="@style/pickerDialogButton"/>
 
     <Button
         android:id="@+id/record_video_btn"
         android:text="@string/record_video"
-        style="@style/pickerDialogButtonStyle"/>
+        style="@style/pickerDialogButton"/>
 
     <Button
         android:id="@+id/pick_video_btn"
         android:text="@string/pick_video"
-        style="@style/pickerDialogButtonStyle"/>
+        style="@style/pickerDialogButton"/>
 
 </LinearLayout>

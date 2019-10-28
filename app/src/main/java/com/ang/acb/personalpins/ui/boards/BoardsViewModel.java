@@ -59,7 +59,7 @@ public class BoardsViewModel extends ViewModel {
     public void createBoard(Context context, String title) {
         // Set default board image with fixed image.
         boardRepository.insertBoard(new Board(title, UiUtils.getImageResourceUri(
-                context, R.drawable.board_cool).toString()));
+                context, R.drawable.board2).toString()));
     }
 
     public void updateBoardCover(String photoCoverUri, long boardId) {

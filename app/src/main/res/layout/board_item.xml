@@ -16,7 +16,7 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        app:cardCornerRadius="8dp"
+        app:cardCornerRadius="@dimen/card_view_corner_radius"
         tools:layout_width="160dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +28,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
-                app:layout_constraintDimensionRatio="W,2:3"
+                app:layout_constraintDimensionRatio="W,3:2"
                 android:contentDescription="@string/board_cover"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -37,18 +37,19 @@
 
             <TextView
                 android:id="@+id/board_title"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="1"
-                android:padding="8dp"
-                android:text="@{board.title}"
+                android:padding="@dimen/padding_small"
+                android:background="@color/title_background"
+                android:textColor="@color/placeholder"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="@{board.title}"
+                app:layout_constraintBottom_toBottomOf="@id/board_cover"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/board_cover"
                 tools:text="@tools:sample/lorem"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

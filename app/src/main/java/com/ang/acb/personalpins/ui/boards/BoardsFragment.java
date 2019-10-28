@@ -82,9 +82,9 @@ public class BoardsFragment extends Fragment {
         boardsAdapter = new BoardsAdapter(this::onBoardClick);
         binding.rvBoards.setAdapter(boardsAdapter);
         binding.rvBoards.setLayoutManager(new GridLayoutManager(
-                getHostActivity(), getResources().getInteger(R.integer.columns_2)));
+                getHostActivity(), getResources().getInteger(R.integer.columns_3)));
         binding.rvBoards.addItemDecoration(new GridMarginDecoration(
-                getHostActivity(), R.dimen.item_offset));
+                getHostActivity(), R.dimen.grid_item_spacing));
 
     }
 

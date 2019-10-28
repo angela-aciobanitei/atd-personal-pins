@@ -92,7 +92,7 @@ public class BoardDetailsFragment extends Fragment {
         binding.rvBoardPins.setLayoutManager(new GridLayoutManager(
                 getHostActivity(), getResources().getInteger(R.integer.columns_3)));
         binding.rvBoardPins.addItemDecoration(new GridMarginDecoration(
-                getHostActivity(), R.dimen.item_offset));
+                getHostActivity(), R.dimen.grid_item_spacing));
     }
 
     private void onPinClick(Pin pin) {

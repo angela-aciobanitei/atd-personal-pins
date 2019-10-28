@@ -5,63 +5,15 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="gridStyle">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:clipToPadding">false</item>
-        <item name="android:nestedScrollingEnabled">false</item>
-        <item name="android:padding">@dimen/item_offset</item>
-    </style>
-
-    <style name="listStyle">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:clipToPadding">false</item>
-        <item name="android:nestedScrollingEnabled">false</item>
-    </style>
-
-    <style name="emptyStateTextStyle">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:gravity">center</item>
-    </style>
-
-    <style name="createButtonStyle" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/colorAccent</item>
-    </style>
-
-    <style name="pinEditButtonStyle">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:background">@color/colorAccent</item>
-        <item name="android:layout_marginTop">@dimen/vertical_margin</item>
-        <item name="android:layout_marginBottom">@dimen/vertical_margin</item>
-    </style>
-
-    <style name="pickerDialogButtonStyle" parent="Widget.AppCompat.Button.Borderless">
+    <style name="pickerDialogButton" parent="Widget.AppCompat.Button.Borderless.Colored">
         <item name="android:layout_width">200dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/colorAccent</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="createNewDialogButtonStyle" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/colorAccent</item>
-        <item name="android:layout_marginTop">@dimen/vertical_margin</item>
-        <item name="android:layout_marginBottom">@dimen/vertical_margin</item>
-    </style>
-
-    <style name="CustomExoMediaButton">
+    <style name="exoMediaButton">
         <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:tint">@color/colorPrimary</item>
         <item name="android:scaleType">fitXY</item>
@@ -69,11 +21,11 @@
         <item name="android:layout_height">48dp</item>
     </style>
 
-    <style name="CustomExoMediaButton.Play">
+    <style name="exoMediaButton.Play">
         <item name="android:src">@drawable/ic_play_circle_filled</item>
     </style>
 
-    <style name="CustomExoMediaButton.Pause">
+    <style name="exoMediaButton.Pause">
         <item name="android:src">@drawable/ic_pause_circle_filled</item>
     </style>
 
