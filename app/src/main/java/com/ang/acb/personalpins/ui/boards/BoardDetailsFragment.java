@@ -88,10 +88,10 @@ public class BoardDetailsFragment extends Fragment {
 
     private void initAdapter() {
         pinsAdapter = new PinsAdapter(this::onPinClick);
-        binding.rvBoardPins.setAdapter(pinsAdapter);
-        binding.rvBoardPins.setLayoutManager(new GridLayoutManager(
+        binding.boardPins.rv.setAdapter(pinsAdapter);
+        binding.boardPins.rv.setLayoutManager(new GridLayoutManager(
                 getHostActivity(), getResources().getInteger(R.integer.columns_3)));
-        binding.rvBoardPins.addItemDecoration(new GridMarginDecoration(
+        binding.boardPins.rv.addItemDecoration(new GridMarginDecoration(
                 getHostActivity(), R.dimen.grid_item_spacing));
     }
 
@@ -119,7 +119,7 @@ public class BoardDetailsFragment extends Fragment {
             binding.setBoardPinsCount(boardPinsCount);
 
             if(boardPinsCount != 0) pinsAdapter.submitList(pins);
-            else binding.boardDetailsEmptyState.setText(R.string.no_board_pins);
+            else binding.boardPins.tv.setText(R.string.no_board_pins);
 
             binding.executePendingBindings();
         });

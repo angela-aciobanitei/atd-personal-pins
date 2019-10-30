@@ -80,10 +80,10 @@ public class BoardsFragment extends Fragment {
 
     private void initAdapter() {
         boardsAdapter = new BoardsAdapter(this::onBoardClick);
-        binding.rvBoards.setAdapter(boardsAdapter);
-        binding.rvBoards.setLayoutManager(new GridLayoutManager(
+        binding.allBoards.rv.setAdapter(boardsAdapter);
+        binding.allBoards.rv.setLayoutManager(new GridLayoutManager(
                 getHostActivity(), getResources().getInteger(R.integer.columns_3)));
-        binding.rvBoards.addItemDecoration(new GridMarginDecoration(
+        binding.allBoards.rv.addItemDecoration(new GridMarginDecoration(
                 getHostActivity(), R.dimen.grid_item_spacing));
 
     }
@@ -102,7 +102,7 @@ public class BoardsFragment extends Fragment {
             binding.setBoardsCount(boardsCount);
 
             if(boardsCount != 0) boardsAdapter.submitList(boards);
-            else binding.boardsEmptyState.setText(R.string.no_boards);
+            else binding.allBoards.tv.setText(R.string.no_boards);
 
             binding.executePendingBindings();
         });

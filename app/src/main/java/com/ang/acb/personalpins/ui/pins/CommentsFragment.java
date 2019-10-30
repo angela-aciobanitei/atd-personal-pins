@@ -91,7 +91,7 @@ public class CommentsFragment extends Fragment {
             int commentsCount = (comments == null) ? 0 : comments.size();
             binding.setCommentsCount(commentsCount);
             if(commentsCount != 0) commentsAdapter.submitList(comments);
-            else binding.commentsEmptyState.setText(R.string.no_comments);
+            else binding.commentsEmptyState.tv.setText(R.string.no_comments);
             binding.executePendingBindings();
         });
     }

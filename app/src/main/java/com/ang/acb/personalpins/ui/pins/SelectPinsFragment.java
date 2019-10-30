@@ -105,11 +105,11 @@ public class SelectPinsFragment extends Fragment {
             }
         });
 
-        binding.rvAllPins.setLayoutManager(new GridLayoutManager(
+        binding.allPins.rv.setLayoutManager(new GridLayoutManager(
                 getHostActivity(), getResources().getInteger(R.integer.columns_3)));
-        binding.rvAllPins.addItemDecoration(new GridMarginDecoration(
+        binding.allPins.rv.addItemDecoration(new GridMarginDecoration(
                 getHostActivity(), R.dimen.grid_item_spacing));
-        binding.rvAllPins.setAdapter(selectPinsAdapter);
+        binding.allPins.rv.setAdapter(selectPinsAdapter);
     }
 
     private void populateUi() {
@@ -119,14 +119,12 @@ public class SelectPinsFragment extends Fragment {
             binding.setAllPinsCount(allPinsCount);
 
             if(allPins == null) {
-                binding.allPinsEmptyState.setText(R.string.no_pins);
+                binding.allPinsEmptyState.tv.setText(R.string.no_pins);
             } else {
                 // Get pins associated with this particular board.
                 boardsViewModel.getPinsForBoard().observe(getViewLifecycleOwner(), boardPins -> {
                     if (boardPins != null) {
                         selectPinsAdapter.updateData(allPins, getPinStates(allPins, boardPins));
-                        // FIXME: IndexOutOfBoundsException: Index: 0, Size: 0
-                        // boardsViewModel.updateBoardCover(boardPins.get(0).getPhotoUri(), boardId);
                         binding.executePendingBindings();
                     }
                 });

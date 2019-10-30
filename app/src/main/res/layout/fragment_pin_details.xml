@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="pin" type="com.ang.acb.personalpins.data.entity.Pin" />
+        <variable
+            name="pin"
+            type="com.ang.acb.personalpins.data.entity.Pin" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -57,7 +60,7 @@
             android:paddingEnd="@dimen/padding_small"
             android:paddingBottom="@dimen/padding_small"
             android:contentDescription="@string/add_to_favorites_icon"
-            android:tint="@color/colorPrimary"
+            android:tint="@color/colorAccent"
             app:setFavoriteSrc="@{pin.isFavorite}"
             app:layout_constraintEnd_toStartOf="@+id/ic_add_comment"
             app:layout_constraintStart_toStartOf="parent"
@@ -69,7 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_comment"
-            android:tint="@color/colorPrimary"
+            android:tint="@color/colorAccent"
             android:padding="@dimen/padding_small"
             android:contentDescription="@string/add_comment_icon"
             app:layout_constraintEnd_toStartOf="@+id/ic_add_tag"
@@ -82,7 +85,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/padding_small"
             android:src="@drawable/ic_tag"
-            android:tint="@color/colorPrimary"
+            android:tint="@color/colorAccent"
             android:contentDescription="@string/add_tag_icon"
             app:layout_constraintStart_toEndOf="@+id/ic_add_comment"
             app:layout_constraintTop_toTopOf="@+id/ic_add_comment" />

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -9,25 +10,17 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.pins.CommentsFragment">
+        android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_favorites"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/grid_item_spacing"
-            android:clipToPadding="false"
-            app:toggleVisibility="@{favoritesCount != 0}"/>
+        <include
+            android:id="@+id/favorites"
+            layout="@layout/content_grids"
+            app:dataCount="@{favoritesCount}"/>
 
-        <TextView
+        <include
             android:id="@+id/favorites_empty_state"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            app:toggleVisibility="@{favoritesCount == 0}"
-            tools:text="@string/no_favorites" />
+            layout="@layout/content_empty_state"
+            app:dataCount="@{favoritesCount}"/>
 
     </FrameLayout>
 </layout>

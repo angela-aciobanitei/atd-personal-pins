@@ -78,11 +78,11 @@ public class PinsFragment extends Fragment {
 
     private void initAdapter() {
         pinsAdapter = new PinsAdapter(this::onPinClick);
-        binding.rvAllPins.setLayoutManager(new GridLayoutManager(
+        binding.allPins.rv.setLayoutManager(new GridLayoutManager(
                 getContext(), getResources().getInteger(R.integer.columns_3)));
-        binding.rvAllPins.addItemDecoration(new GridMarginDecoration(
+        binding.allPins.rv.addItemDecoration(new GridMarginDecoration(
                 getContext(), R.dimen.grid_item_spacing));
-        binding.rvAllPins.setAdapter(pinsAdapter);
+        binding.allPins.rv.setAdapter(pinsAdapter);
     }
 
     private void onPinClick(Pin pin) {
@@ -99,7 +99,7 @@ public class PinsFragment extends Fragment {
             binding.setAllPinsCount(allPinsCount);
 
             if(allPinsCount != 0) pinsAdapter.submitList(pins);
-            else binding.allPinsEmptyState.setText(R.string.no_pins);
+            else binding.allPins.tv.setText(R.string.no_pins);
 
             binding.executePendingBindings();
         });

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable name="allPinsCount" type="int"/>
@@ -11,22 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_all_pins"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/grid_item_spacing"
-            android:clipToPadding="false"
-            app:toggleVisibility="@{allPinsCount != 0}" />
+        <include
+            android:id="@+id/all_pins"
+            layout="@layout/content_gridlist"
+            app:dataCount="@{allPinsCount}"/>
 
-        <TextView
+        <include
             android:id="@+id/all_pins_empty_state"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            app:toggleVisibility="@{allPinsCount == 0}"
-            tools:text="@string/no_pins" />
+            layout="@layout/content_empty_state"
+            app:dataCount="@{allPinsCount}"/>
 
     </FrameLayout>
 

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable name="boardPinsCount" type="int"/>
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -17,33 +17,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/add_pins"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_board_pins"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/grid_item_spacing"
-            android:clipToPadding="false"
-            app:toggleVisibility="@{boardPinsCount!= 0}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_pins_button"/>
+        <include
+            android:id="@+id/board_pins"
+            layout="@layout/content_gridlist"
+            app:dataCount="@{boardPinsCount}"/>
 
-        <TextView
-            android:id="@+id/board_details_empty_state"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            tools:text="@string/no_pins_added"
-            app:toggleVisibility="@{boardPinsCount == 0}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </layout>

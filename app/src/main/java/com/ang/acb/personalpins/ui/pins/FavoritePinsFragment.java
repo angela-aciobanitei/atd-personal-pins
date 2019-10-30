@@ -73,11 +73,11 @@ public class FavoritePinsFragment extends Fragment {
 
     private void initAdapter() {
         pinsAdapter = new PinsAdapter(this::onPinClick);
-        binding.rvFavorites.setLayoutManager(new GridLayoutManager(
+        binding.favorites.rv.setLayoutManager(new GridLayoutManager(
                 getContext(), getResources().getInteger(R.integer.columns_3)));
-        binding.rvFavorites.addItemDecoration(new GridMarginDecoration(
+        binding.favorites.rv.addItemDecoration(new GridMarginDecoration(
                 getContext(), R.dimen.grid_item_spacing));
-        binding.rvFavorites.setAdapter(pinsAdapter);
+        binding.favorites.rv.setAdapter(pinsAdapter);
     }
 
     private void onPinClick(Pin pin) {
@@ -94,7 +94,7 @@ public class FavoritePinsFragment extends Fragment {
             binding.setFavoritesCount(favoritesCount);
 
             if(favoritesCount != 0) pinsAdapter.submitList(pins);
-            else binding.favoritesEmptyState.setText(R.string.no_favorites);
+            else binding.favoritesEmptyState.tv.setText(R.string.no_favorites);
 
             binding.executePendingBindings();
         });
