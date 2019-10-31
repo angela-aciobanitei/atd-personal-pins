@@ -32,16 +32,7 @@ public class BoardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        // Bind item data
-        Board board = boards.get(position);
-        ((BoardViewHolder) holder).bindTo(board);
-
-        // Handle item click events
-        holder.itemView.setOnClickListener(v -> {
-            if (board != null && clickCallback != null) {
-                clickCallback.onClick(board);
-            }
-        });
+        ((BoardViewHolder) holder).bindTo(boards.get(position));
     }
 
     @Override
@@ -69,12 +60,19 @@ public class BoardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             this.binding = binding;
         }
 
-
         void bindTo(Board board) {
             // Bind data for this item.
             binding.setBoard(board);
 
+            // Set board cover.
             binding.boardCover.setImageURI(Uri.parse(board.getPhotoCoverUri()));
+
+            // Handle item click events
+            binding.getRoot().setOnClickListener(view -> {
+                if (clickCallback != null) {
+                    clickCallback.onClick(board);
+                }
+            });
 
             // Binding must be executed immediately.
             binding.executePendingBindings();

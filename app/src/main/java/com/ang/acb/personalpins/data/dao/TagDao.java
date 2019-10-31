@@ -8,7 +8,6 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
-
 import com.ang.acb.personalpins.data.entity.Tag;
 
 import java.util.List;

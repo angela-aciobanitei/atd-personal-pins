@@ -82,7 +82,7 @@ public class BoardsFragment extends Fragment {
         boardsAdapter = new BoardsAdapter(this::onBoardClick);
         binding.allBoards.rv.setAdapter(boardsAdapter);
         binding.allBoards.rv.setLayoutManager(new GridLayoutManager(
-                getHostActivity(), getResources().getInteger(R.integer.columns_3)));
+                getHostActivity(), getResources().getInteger(R.integer.columns_count)));
         binding.allBoards.rv.addItemDecoration(new GridMarginDecoration(
                 getHostActivity(), R.dimen.grid_item_spacing));
 
@@ -109,9 +109,7 @@ public class BoardsFragment extends Fragment {
     }
 
     private void handleNewBoardCreation() {
-        binding.newBoardButton.setOnClickListener(view -> {
-            showNewBoardDialog();
-        });
+        binding.newBoardButton.setOnClickListener(view -> showNewBoardDialog());
     }
 
     private void showNewBoardDialog() {
@@ -119,7 +117,6 @@ public class BoardsFragment extends Fragment {
         View dialogView = getHostActivity().getLayoutInflater()
                 .inflate(R.layout.create_new_dialog, null);
         dialogBuilder.setView(dialogView);
-
         AlertDialog dialog = dialogBuilder.create();
 
         // Set title
@@ -133,14 +130,14 @@ public class BoardsFragment extends Fragment {
         Button saveButton = dialogView.findViewById(R.id.dialog_new_save_btn);
         saveButton.setOnClickListener(view -> {
             String input = editText.getText().toString();
-            if (input.trim().length() != 0) boardsViewModel.createBoard(getContext(), input);
+            if (input.trim().length() != 0) {
+                boardsViewModel.createBoard(getContext(), input);
+            }
             dialog.dismiss();
         });
 
         Button cancelButton = dialogView.findViewById(R.id.dialog_new_cancel_btn);
-        cancelButton.setOnClickListener(view -> {
-            dialog.cancel();
-        });
+        cancelButton.setOnClickListener(view -> dialog.cancel());
 
         dialog.show();
     }
@@ -148,5 +145,4 @@ public class BoardsFragment extends Fragment {
     private MainActivity getHostActivity(){
         return  (MainActivity) getActivity();
     }
-
 }

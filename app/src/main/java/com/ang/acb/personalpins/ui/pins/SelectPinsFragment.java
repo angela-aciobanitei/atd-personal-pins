@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 import com.ang.acb.personalpins.R;
 import com.ang.acb.personalpins.data.entity.Pin;
 import com.ang.acb.personalpins.databinding.FragmentPinSelectBinding;
-import com.ang.acb.personalpins.ui.boards.BoardsViewModel;
+import com.ang.acb.personalpins.ui.boards.BoardDetailsViewModel;
 import com.ang.acb.personalpins.ui.common.MainActivity;
 import com.ang.acb.personalpins.utils.GridMarginDecoration;
 import com.google.android.material.snackbar.Snackbar;
@@ -33,13 +33,13 @@ import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 
-public class SelectPinsFragment extends Fragment {
+import static com.ang.acb.personalpins.ui.boards.BoardsFragment.ARG_BOARD_ID;
 
-    public static final String ARG_BOARD_ID = "ARG_BOARD_ID";
+public class SelectPinsFragment extends Fragment {
 
     private FragmentPinSelectBinding binding;
     private PinsViewModel pinsViewModel;
-    private BoardsViewModel boardsViewModel;
+    private BoardDetailsViewModel boardDetailsViewModel;
     private SelectPinsAdapter selectPinsAdapter;
     private long boardId;
 
@@ -85,9 +85,9 @@ public class SelectPinsFragment extends Fragment {
     private void initViewModels() {
         pinsViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(PinsViewModel.class);
-        boardsViewModel = ViewModelProviders.of(this, viewModelFactory)
-                .get(BoardsViewModel.class);
-        boardsViewModel.setBoardId(boardId);
+        boardDetailsViewModel = ViewModelProviders.of(this, viewModelFactory)
+                .get(BoardDetailsViewModel.class);
+        boardDetailsViewModel.setBoardId(boardId);
     }
 
     private void initAdapter() {
@@ -106,7 +106,7 @@ public class SelectPinsFragment extends Fragment {
         });
 
         binding.allPins.rv.setLayoutManager(new GridLayoutManager(
-                getHostActivity(), getResources().getInteger(R.integer.columns_3)));
+                getHostActivity(), getResources().getInteger(R.integer.columns_count)));
         binding.allPins.rv.addItemDecoration(new GridMarginDecoration(
                 getHostActivity(), R.dimen.grid_item_spacing));
         binding.allPins.rv.setAdapter(selectPinsAdapter);
@@ -122,7 +122,7 @@ public class SelectPinsFragment extends Fragment {
                 binding.allPinsEmptyState.tv.setText(R.string.no_pins);
             } else {
                 // Get pins associated with this particular board.
-                boardsViewModel.getPinsForBoard().observe(getViewLifecycleOwner(), boardPins -> {
+                boardDetailsViewModel.getPinsForBoard().observe(getViewLifecycleOwner(), boardPins -> {
                     if (boardPins != null) {
                         selectPinsAdapter.updateData(allPins, getPinStates(allPins, boardPins));
                         binding.executePendingBindings();

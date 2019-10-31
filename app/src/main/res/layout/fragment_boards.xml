@@ -14,15 +14,12 @@
 
         <Button
             android:id="@+id/new_board_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small"
             android:text="@string/new_board"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
+            style="@style/defaultButton"/>
 
         <include
             android:id="@+id/all_boards"
-            layout="@layout/content_gridlist"
+            layout="@layout/content_items"
             app:dataCount="@{boardsCount}"/>
 
     </LinearLayout>

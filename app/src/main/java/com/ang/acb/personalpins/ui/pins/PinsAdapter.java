@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ang.acb.personalpins.data.entity.Pin;
 import com.ang.acb.personalpins.databinding.PinItemBinding;
 import com.ang.acb.personalpins.utils.GlideApp;
-import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -36,9 +35,7 @@ public class PinsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        // Bind item data
-        Pin pin = pins.get(position);
-        ((PinViewHolder) holder).bindTo(pin);
+        ((PinViewHolder) holder).bindTo(pins.get(position));
     }
 
     @Override

@@ -32,7 +32,6 @@ public class PinDetailsViewModel extends ViewModel {
     private LiveData<List<Comment>> pinComments;
     private LiveData<Pin> pin;
     private final SnackbarMessage snackbarMessage = new SnackbarMessage();
-    private boolean isFavorite;
 
     @Inject
     public PinDetailsViewModel(PinRepository pinRepository) {
@@ -41,10 +40,6 @@ public class PinDetailsViewModel extends ViewModel {
 
     public void setPinId(long id) {
         pinId.setValue(id);
-    }
-
-    public void setFavorite(boolean isFavorite) {
-        this.isFavorite = isFavorite;
     }
 
     public LiveData<Pin> getPin() {
@@ -81,17 +76,16 @@ public class PinDetailsViewModel extends ViewModel {
         return snackbarMessage;
     }
 
-
     public void onFavoriteClicked() {
-        Pin markedPin = Objects.requireNonNull(pin.getValue());
-        if (!isFavorite) {
-            pinRepository.markAsFavorite(Objects.requireNonNull(markedPin));
-            snackbarMessage.setValue(R.string.pin_added_to_favorites);
-            isFavorite = true;
-        } else {
-            pinRepository.markAsNotFavorite(Objects.requireNonNull(markedPin));
-            snackbarMessage.setValue(R.string.pin_removed_from_favorites);
-            isFavorite = false;
+        Pin markedPin = getPin().getValue();
+        if (markedPin != null) {
+            if (!markedPin.isFavorite()) {
+                pinRepository.markAsFavorite(Objects.requireNonNull(markedPin));
+                snackbarMessage.setValue(R.string.pin_added_to_favorites);
+            } else {
+                pinRepository.markAsNotFavorite(Objects.requireNonNull(markedPin));
+                snackbarMessage.setValue(R.string.pin_removed_from_favorites);
+            }
         }
     }
 

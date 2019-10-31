@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import com.ang.acb.personalpins.R;
 import com.ang.acb.personalpins.data.entity.Pin;
 import com.ang.acb.personalpins.databinding.FragmentFavoritePinsBinding;
-import com.ang.acb.personalpins.databinding.FragmentPinListBinding;
 import com.ang.acb.personalpins.utils.GridMarginDecoration;
 
 import org.jetbrains.annotations.NotNull;
@@ -77,7 +76,7 @@ public class FavoritePinsFragment extends Fragment {
     private void initAdapter() {
         pinsAdapter = new PinsAdapter(this::onPinClick);
         binding.favorites.rv.setLayoutManager(new GridLayoutManager(
-                getContext(), getResources().getInteger(R.integer.columns_3)));
+                getContext(), getResources().getInteger(R.integer.columns_count)));
         binding.favorites.rv.addItemDecoration(new GridMarginDecoration(
                 getContext(), R.dimen.grid_item_spacing));
         binding.favorites.rv.setAdapter(pinsAdapter);
@@ -116,5 +115,4 @@ public class FavoritePinsFragment extends Fragment {
             binding.executePendingBindings();
         });
     }
-
 }

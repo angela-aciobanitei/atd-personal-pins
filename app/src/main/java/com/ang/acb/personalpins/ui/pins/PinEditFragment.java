@@ -26,7 +26,6 @@ import android.widget.Toast;
 import com.ang.acb.personalpins.R;
 import com.ang.acb.personalpins.data.entity.Pin;
 import com.ang.acb.personalpins.databinding.FragmentPinEditBinding;
-import com.bumptech.glide.Glide;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -48,15 +47,14 @@ public class PinEditFragment extends Fragment {
 
     public static final String ARG_PIN_URI = "ARG_PIN_URI";
     public static final String ARG_PIN_IS_VIDEO = "ARG_PIN_IS_VIDEO";
-    private static final String CURRENT_PLAYBACK_POSITION_KEY = "CURRENT_PLAYBACK_POSITION_KEY";
-    private static final String SHOULD_PLAY_WHEN_READY_KEY = "SHOULD_PLAY_WHEN_READY_KEY";
+    private static final String EXTRA_PLAYBACK_POSITION = "EXTRA_PLAYBACK_POSITION";
+    private static final String EXTRA_SHOULD_PLAY = "EXTRA_SHOULD_PLAY";
 
     private FragmentPinEditBinding binding;
     private PinsViewModel pinsViewModel;
     private String pinTitle;
     private Uri pinUri;
     private boolean isVideo;
-
     private SimpleExoPlayer simpleExoPlayer;
     private boolean shouldPlayWhenReady;
     private long currentPlaybackPosition;
@@ -95,17 +93,17 @@ public class PinEditFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putLong(CURRENT_PLAYBACK_POSITION_KEY, currentPlaybackPosition);
-        outState.putBoolean(SHOULD_PLAY_WHEN_READY_KEY, shouldPlayWhenReady);
+        outState.putLong(EXTRA_PLAYBACK_POSITION, currentPlaybackPosition);
+        outState.putBoolean(EXTRA_SHOULD_PLAY, shouldPlayWhenReady);
     }
 
     private void restoreInstanceState(Bundle savedInstanceState){
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(CURRENT_PLAYBACK_POSITION_KEY)) {
-                currentPlaybackPosition = savedInstanceState.getLong(CURRENT_PLAYBACK_POSITION_KEY);
+            if (savedInstanceState.containsKey(EXTRA_PLAYBACK_POSITION)) {
+                currentPlaybackPosition = savedInstanceState.getLong(EXTRA_PLAYBACK_POSITION);
             }
-            if (savedInstanceState.containsKey(SHOULD_PLAY_WHEN_READY_KEY)) {
-                shouldPlayWhenReady = savedInstanceState.getBoolean(SHOULD_PLAY_WHEN_READY_KEY);
+            if (savedInstanceState.containsKey(EXTRA_SHOULD_PLAY)) {
+                shouldPlayWhenReady = savedInstanceState.getBoolean(EXTRA_SHOULD_PLAY);
             }
         }
     }
@@ -147,8 +145,8 @@ public class PinEditFragment extends Fragment {
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
                 Objects.requireNonNull(getContext()),
                 Util.getUserAgent(getContext(), getString(R.string.app_name)));
-        MediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(pinUri);
+        MediaSource mediaSource = new ProgressiveMediaSource
+                .Factory(dataSourceFactory).createMediaSource(pinUri);
 
         // Prepare the player.
         simpleExoPlayer.prepare(mediaSource);
@@ -232,20 +230,16 @@ public class PinEditFragment extends Fragment {
         binding.pinEditSaveBtn.setOnClickListener(view -> {
             if (pinTitle != null && !pinTitle.isEmpty()) {
                 // Save result into the database.
-                if(isVideo) {
-                    pinsViewModel.createPin(new Pin(
+                if(isVideo) pinsViewModel.createPin(new Pin(
                             pinTitle, null, pinUri.toString(), false));
-                }
-                else {
-                    pinsViewModel.createPin(new Pin(
+                else pinsViewModel.createPin(new Pin(
                             pinTitle, pinUri.toString(), null, false));
-                }
 
                 // Navigate back to pin list fragment.
                 Navigation.findNavController(view).popBackStack(R.id.pins, false);
             } else {
                 Toast.makeText(getActivity(), getString(R.string.enter_pin_title),
-                        Toast.LENGTH_SHORT).show();
+                               Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -256,5 +250,4 @@ public class PinEditFragment extends Fragment {
             Navigation.findNavController(view).popBackStack(R.id.pins, false);
         });
     }
-
 }

@@ -89,8 +89,10 @@ public class CommentsFragment extends Fragment {
         pinDetailsViewModel.getPinComments().observe(getViewLifecycleOwner(), comments -> {
             int commentsCount = (comments == null) ? 0 : comments.size();
             binding.setCommentsCount(commentsCount);
+
             if(commentsCount != 0) commentsAdapter.submitList(comments);
             else binding.commentsEmptyState.tv.setText(R.string.no_comments);
+
             binding.executePendingBindings();
         });
     }

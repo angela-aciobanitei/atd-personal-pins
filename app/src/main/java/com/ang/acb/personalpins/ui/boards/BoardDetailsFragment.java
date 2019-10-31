@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -93,7 +94,7 @@ public class BoardDetailsFragment extends Fragment {
         pinsAdapter = new PinsAdapter(this::onPinClick);
         binding.boardPins.rv.setAdapter(pinsAdapter);
         binding.boardPins.rv.setLayoutManager(new GridLayoutManager(
-                getHostActivity(), getResources().getInteger(R.integer.columns_3)));
+                getHostActivity(), getResources().getInteger(R.integer.columns_count)));
         binding.boardPins.rv.addItemDecoration(new GridMarginDecoration(
                 getHostActivity(), R.dimen.grid_item_spacing));
     }
@@ -123,9 +124,8 @@ public class BoardDetailsFragment extends Fragment {
     private void observeBoard() {
         boardDetailsViewModel.getBoard().observe(getViewLifecycleOwner(), board -> {
             if (board != null) {
-                if (getHostActivity().getSupportActionBar() != null) {
-                    getHostActivity().getSupportActionBar().setTitle(board.getTitle());
-                }
+                ActionBar actionBar = getHostActivity().getSupportActionBar();
+                if (actionBar != null) actionBar.setTitle(board.getTitle());
             }
         });
     }

@@ -56,8 +56,8 @@ public class PinDetailsFragment extends Fragment {
     public static final String ARG_PIN_ID = "ARG_PIN_ID";
     public static final String ARG_PIN_IS_PHOTO = "ARG_PIN_IS_PHOTO";
 
-    private static final String CURRENT_PLAYBACK_POSITION_KEY = "CURRENT_PLAYBACK_POSITION_KEY";
-    private static final String SHOULD_PLAY_WHEN_READY_KEY = "SHOULD_PLAY_WHEN_READY_KEY";
+    private static final String EXTRA_PLAYBACK_POSITION = "EXTRA_PLAYBACK_POSITION";
+    private static final String EXTRA_SHOULD_PLAY = "EXTRA_SHOULD_PLAY";
 
     private FragmentPinDetailsBinding binding;
     private PinDetailsViewModel pinDetailsViewModel;
@@ -127,17 +127,17 @@ public class PinDetailsFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putLong(CURRENT_PLAYBACK_POSITION_KEY, currentPlaybackPosition);
-        outState.putBoolean(SHOULD_PLAY_WHEN_READY_KEY, shouldPlayWhenReady);
+        outState.putLong(EXTRA_PLAYBACK_POSITION, currentPlaybackPosition);
+        outState.putBoolean(EXTRA_SHOULD_PLAY, shouldPlayWhenReady);
     }
 
     private void restoreInstanceState(Bundle savedInstanceState){
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(CURRENT_PLAYBACK_POSITION_KEY)) {
-                currentPlaybackPosition = savedInstanceState.getLong(CURRENT_PLAYBACK_POSITION_KEY);
+            if (savedInstanceState.containsKey(EXTRA_PLAYBACK_POSITION)) {
+                currentPlaybackPosition = savedInstanceState.getLong(EXTRA_PLAYBACK_POSITION);
             }
-            if (savedInstanceState.containsKey(SHOULD_PLAY_WHEN_READY_KEY)) {
-                shouldPlayWhenReady = savedInstanceState.getBoolean(SHOULD_PLAY_WHEN_READY_KEY);
+            if (savedInstanceState.containsKey(EXTRA_SHOULD_PLAY)) {
+                shouldPlayWhenReady = savedInstanceState.getBoolean(EXTRA_SHOULD_PLAY);
             }
         }
     }
@@ -152,7 +152,6 @@ public class PinDetailsFragment extends Fragment {
         pinDetailsViewModel.getPin().observe(getViewLifecycleOwner(), pin -> {
             if (pin != null) {
                 binding.setPin(pin);
-                pinDetailsViewModel.setFavorite(pin.isFavorite());
                 if(pin.getPhotoUri() != null && !pin.getPhotoUri().isEmpty()) {
                     loadPhoto(Uri.parse(pin.getPhotoUri()));
                 }
@@ -177,7 +176,7 @@ public class PinDetailsFragment extends Fragment {
                 // Tell Glide not to use its standard crossfade animation.
                 .dontAnimate()
                 // Display a placeholder until the image is loaded and processed.
-                .placeholder(R.color.placeholder)
+                .placeholder(R.color.imagePlaceholder)
                 // Keep track of errors and successful image loading.
                 .listener(new RequestListener<Bitmap>() {
                     @Override
@@ -259,12 +258,6 @@ public class PinDetailsFragment extends Fragment {
         }
     }
 
-    private void resetPlayer() {
-        shouldPlayWhenReady = true;
-        currentPlaybackPosition = 0;
-        if (simpleExoPlayer != null) simpleExoPlayer.stop();
-    }
-
     private void observeTags() {
         binding.rvTags.setLayoutManager(new LinearLayoutManager(
                 getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -278,9 +271,8 @@ public class PinDetailsFragment extends Fragment {
     }
 
     private void handleFavorite() {
-        binding.icAddToFavorite.setOnClickListener(view -> {
-            pinDetailsViewModel.onFavoriteClicked();
-        });
+        binding.icAddToFavorite.setOnClickListener(view ->
+                pinDetailsViewModel.onFavoriteClicked());
 
         // Observe the Snackbar messages displayed when adding/removing pin to/from favorites.
         pinDetailsViewModel.getSnackbarMessage().observe(
@@ -289,15 +281,11 @@ public class PinDetailsFragment extends Fragment {
     }
 
     private void handleNewTag() {
-        binding.icAddTag.setOnClickListener(view -> {
-            createNewTagDialog();
-        });
+        binding.icAddTag.setOnClickListener(view -> createNewTagDialog());
     }
 
     private void handleNewComment() {
-        binding.icAddComment.setOnClickListener(view -> {
-            createNewCommentDialog();
-        });
+        binding.icAddComment.setOnClickListener(view -> createNewCommentDialog());
     }
 
     private void createNewTagDialog() {
@@ -305,7 +293,6 @@ public class PinDetailsFragment extends Fragment {
         View dialogView = getHostActivity().getLayoutInflater()
                 .inflate(R.layout.create_new_dialog, null);
         dialogBuilder.setView(dialogView);
-
         AlertDialog dialog = dialogBuilder.create();
 
         // Set title
@@ -326,9 +313,7 @@ public class PinDetailsFragment extends Fragment {
         });
 
         Button cancelButton = dialogView.findViewById(R.id.dialog_new_cancel_btn);
-        cancelButton.setOnClickListener(view -> {
-            dialog.cancel();
-        });
+        cancelButton.setOnClickListener(view -> dialog.cancel());
 
         dialog.show();
     }
@@ -338,7 +323,6 @@ public class PinDetailsFragment extends Fragment {
         View dialogView = getHostActivity().getLayoutInflater()
                 .inflate(R.layout.create_new_dialog, null);
         dialogBuilder.setView(dialogView);
-
         AlertDialog dialog = dialogBuilder.create();
 
         // Set title
@@ -359,9 +343,7 @@ public class PinDetailsFragment extends Fragment {
         });
 
         Button cancelButton = dialogView.findViewById(R.id.dialog_new_cancel_btn);
-        cancelButton.setOnClickListener(view -> {
-            dialog.cancel();
-        });
+        cancelButton.setOnClickListener(view -> dialog.cancel());
 
         dialog.show();
     }

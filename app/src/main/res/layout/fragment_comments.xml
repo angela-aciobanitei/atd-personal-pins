@@ -10,10 +10,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/margin_normal"
-        android:layout_marginBottom="@dimen/margin_normal"
-        android:layout_marginStart="@dimen/margin_normal"
-        android:layout_marginEnd="@dimen/margin_normal">
+        android:layout_margin="@dimen/margin_normal">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_comments"

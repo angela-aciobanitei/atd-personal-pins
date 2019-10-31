@@ -1,20 +1,16 @@
 <resources>
     <string name="app_name">Personal Pins</string>
-
-    <!-- Used for Navigation -->
     <string name="boards">Boards</string>
     <string name="pins">Pins</string>
     <string name="pin_select">Select Pins</string>
     <string name="pin_edit">Edit Pin</string>
-
     <string name="take_photo">Take Photo</string>
     <string name="pick_photo">Pick Photo</string>
     <string name="record_video">Record Video</string>
     <string name="pick_video">Pick Video</string>
-
     <string name="new_board">CREATE BOARD</string>
     <string name="board_name">Board name</string>
-    <string name="save">SAVE</string>
+    <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="board_cover">Board Default Cover</string>
     <string name="no_board_pins">No pins for this board yet</string>
@@ -50,5 +46,4 @@
     <string name="pin_removed_from_favorites">Pin removed from favorites</string>
     <string name="no_favorites">No favorite pins yet</string>
     <string name="no_data">No data yet</string>
-
 </resources>

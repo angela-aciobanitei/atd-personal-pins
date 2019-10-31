@@ -14,14 +14,12 @@
 
         <Button
             android:id="@+id/add_pins_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/add_pins"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
+            style="@style/defaultButton"/>
 
         <include
             android:id="@+id/board_pins"
-            layout="@layout/content_gridlist"
+            layout="@layout/content_items"
             app:dataCount="@{boardPinsCount}"/>
 
     </LinearLayout>

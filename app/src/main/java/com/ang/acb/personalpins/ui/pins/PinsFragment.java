@@ -79,7 +79,7 @@ public class PinsFragment extends Fragment {
     private void initAdapter() {
         pinsAdapter = new PinsAdapter(this::onPinClick);
         binding.allPins.rv.setLayoutManager(new GridLayoutManager(
-                getContext(), getResources().getInteger(R.integer.columns_3)));
+                getContext(), getResources().getInteger(R.integer.columns_count)));
         binding.allPins.rv.addItemDecoration(new GridMarginDecoration(
                 getContext(), R.dimen.grid_item_spacing));
         binding.allPins.rv.setAdapter(pinsAdapter);

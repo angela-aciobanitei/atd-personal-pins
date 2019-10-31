@@ -31,7 +31,6 @@ public class BoardsViewModel extends ViewModel {
 
     private BoardRepository boardRepository;
     private LiveData<List<Board>> allBoards;
-    private final MutableLiveData<Long> boardId = new MutableLiveData<>();
 
     @Inject
     public BoardsViewModel(BoardRepository boardRepository) {
@@ -45,26 +44,13 @@ public class BoardsViewModel extends ViewModel {
         return allBoards;
     }
 
-    public void setBoardId(long value) {
-        boardId.setValue(value);
-    }
-
-    public LiveData<List<Pin>> getPinsForBoard() {
-        return Transformations.switchMap(boardId, id -> {
-            if (id == null) return AbsentLiveData.create();
-            else return boardRepository.getPinsForBoard(id);
-        });
-    }
-
     public void createBoard(Context context, String title) {
         // Set default board image with fixed image.
-        boardRepository.insertBoard(new Board(title, UiUtils.getImageResourceUri(
-                context, R.drawable.board2).toString()));
+        boardRepository.insertBoard(new Board(title,
+                UiUtils.getImageResourceUri(context, R.drawable.board2).toString()));
     }
 
     public void updateBoardCover(String photoCoverUri, long boardId) {
         boardRepository.updateBoardCover(photoCoverUri, boardId);
     }
-
-
 }

@@ -29,10 +29,10 @@ public interface PinDao {
     void delete(Pin pin);
 
     @Query("UPDATE pin SET is_favorite = 1 WHERE id = :pinId")
-    public abstract void markAsFavorite(long pinId);
+    void markAsFavorite(long pinId);
 
     @Query("UPDATE pin SET is_favorite = 0 WHERE id = :pinId")
-    public abstract void markAsNotFavorite(long pinId);
+    void markAsNotFavorite(long pinId);
 
     @Query("DELETE FROM pin WHERE id = :id")
     void deleteById(long id);

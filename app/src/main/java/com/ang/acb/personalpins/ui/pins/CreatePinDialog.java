@@ -34,12 +34,12 @@ import static com.ang.acb.personalpins.ui.pins.PinEditFragment.ARG_PIN_URI;
 
 public class CreatePinDialog extends DialogFragment {
 
-    public static final int REQUEST_TAKE_PHOTO = 103;
-    public static final int REQUEST_TAKE_VIDEO = 104;
-    public static final int REQUEST_PICK_PHOTO = 106;
-    public static final int REQUEST_PICK_VIDEO = 107;
-    public static final int MEDIA_TYPE_IMAGE = 200;
-    public static final int MEDIA_TYPE_VIDEO = 201;
+    private static final int REQUEST_TAKE_PHOTO = 103;
+    private static final int REQUEST_TAKE_VIDEO = 104;
+    private static final int REQUEST_PICK_PHOTO = 106;
+    private static final int REQUEST_PICK_VIDEO = 107;
+    private static final int MEDIA_TYPE_IMAGE = 200;
+    private static final int MEDIA_TYPE_VIDEO = 201;
 
     private Uri pinUri;
     private boolean isVideo;
@@ -50,7 +50,6 @@ public class CreatePinDialog extends DialogFragment {
 
     // Required empty public constructor
     public CreatePinDialog() {}
-
 
     @Nullable
     @Override
@@ -68,21 +67,10 @@ public class CreatePinDialog extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        takePhotoBtn.setOnClickListener(takePhoto -> {
-            takePhoto();
-        });
-
-        pickPhotoBtn.setOnClickListener(pickPhoto -> {
-            pickPhoto();
-        });
-
-        pickVideoBtn.setOnClickListener(pickVideo -> {
-            pickVideo();
-        });
-
-        recordVideoBtn.setOnClickListener(recordVideo -> {
-            recordVideo();
-        });
+        takePhotoBtn.setOnClickListener(takePhoto -> takePhoto());
+        pickPhotoBtn.setOnClickListener(pickPhoto -> pickPhoto());
+        pickVideoBtn.setOnClickListener(pickVideo -> pickVideo());
+        recordVideoBtn.setOnClickListener(recordVideo -> recordVideo());
     }
 
     private void pickPhoto() {

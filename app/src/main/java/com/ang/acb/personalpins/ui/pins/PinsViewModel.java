@@ -33,17 +33,6 @@ public class PinsViewModel extends ViewModel {
         pinId.setValue(value);
     }
 
-    public LiveData<List<Board>> getBoardsForPin() {
-        return Transformations.switchMap(pinId, id -> {
-            if (id == null) return AbsentLiveData.create();
-            else return pinRepository.getBoardsForPin(id);
-        });
-    }
-
-    public SnackbarMessage getSnackbarMessage() {
-        return snackbarMessage;
-    }
-
     public LiveData<List<Pin>> getAllPins() {
         if (allPins == null) {
             allPins = pinRepository.getAllPins();
@@ -56,6 +45,10 @@ public class PinsViewModel extends ViewModel {
             favoritePins = pinRepository.getAllFavoritePins();
         }
         return favoritePins;
+    }
+
+    public SnackbarMessage getSnackbarMessage() {
+        return snackbarMessage;
     }
 
     public void createPin(Pin pin) {

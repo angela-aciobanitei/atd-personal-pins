@@ -26,9 +26,7 @@ public class TagsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        // Bind item data
-        Tag tag = tags.get(position);
-        ((TagViewHolder) holder).bindTo(tag);
+        ((TagViewHolder) holder).bindTo(tags.get(position));
     }
 
     @Override
