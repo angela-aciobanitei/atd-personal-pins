@@ -3,8 +3,10 @@ package com.ang.acb.personalpins.ui.pins;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ang.acb.personalpins.data.entity.Pin;
@@ -37,13 +39,6 @@ public class PinsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         // Bind item data
         Pin pin = pins.get(position);
         ((PinViewHolder) holder).bindTo(pin);
-
-        // Handle item click events
-        holder.itemView.setOnClickListener(v -> {
-            if (pin != null && clickCallback != null) {
-                clickCallback.onClick(pin);
-            }
-        });
     }
 
     @Override
@@ -58,7 +53,7 @@ public class PinsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public interface PinClickCallback {
-        void onClick(Pin pin);
+        void onClick(Pin pin, ImageView sharedImageView);
     }
 
     class PinViewHolder extends RecyclerView.ViewHolder {
@@ -71,14 +66,17 @@ public class PinsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             this.binding = binding;
         }
 
-
         void bindTo(Pin pin) {
             // Bind data for this item.
             binding.setPin(pin);
 
+            // Set the string value of the pin ID as the unique transition name
+            // for the image view that will be used in the shared element transition.
+            ViewCompat.setTransitionName(binding.pinItemCover, String.valueOf(pin.getId()));
+
             // Handle pin cover
             if (pin.getPhotoUri() != null) {
-                Glide.with(itemView.getContext())
+                GlideApp.with(binding.pinItemCover.getContext())
                         .load(Uri.parse(pin.getPhotoUri()))
                         .into(binding.pinItemCover);
             } else if (pin.getVideoUri() != null) {
@@ -87,6 +85,13 @@ public class PinsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 binding.pinItemVideoView.pause();
                 binding.pinItemVideoView.seekTo(100);
             }
+
+            // Handle item click events
+            binding.getRoot().setOnClickListener(view -> {
+                if (clickCallback != null) {
+                    clickCallback.onClick(pin, binding.pinItemCover);
+                }
+            });
 
             // Binding must be executed immediately.
             binding.executePendingBindings();

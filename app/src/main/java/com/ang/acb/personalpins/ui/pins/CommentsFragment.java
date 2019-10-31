@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
@@ -25,7 +24,7 @@ import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 
-import static com.ang.acb.personalpins.ui.pins.PinsFragment.ARG_PIN_ID;
+import static com.ang.acb.personalpins.ui.pins.PinDetailsFragment.ARG_PIN_ID;
 
 public class CommentsFragment extends Fragment {
 

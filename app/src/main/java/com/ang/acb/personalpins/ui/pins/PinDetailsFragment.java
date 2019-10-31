@@ -3,18 +3,21 @@ package com.ang.acb.personalpins.ui.pins;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.transition.TransitionInflater;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,9 +29,12 @@ import android.widget.TextView;
 import com.ang.acb.personalpins.R;
 import com.ang.acb.personalpins.databinding.FragmentPinDetailsBinding;
 import com.ang.acb.personalpins.ui.common.MainActivity;
+import com.ang.acb.personalpins.utils.GlideApp;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -44,10 +50,11 @@ import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 
-import static com.ang.acb.personalpins.ui.pins.PinsFragment.ARG_PIN_ID;
-
 
 public class PinDetailsFragment extends Fragment {
+
+    public static final String ARG_PIN_ID = "ARG_PIN_ID";
+    public static final String ARG_PIN_IS_PHOTO = "ARG_PIN_IS_PHOTO";
 
     private static final String CURRENT_PLAYBACK_POSITION_KEY = "CURRENT_PLAYBACK_POSITION_KEY";
     private static final String SHOULD_PLAY_WHEN_READY_KEY = "SHOULD_PLAY_WHEN_READY_KEY";
@@ -56,6 +63,7 @@ public class PinDetailsFragment extends Fragment {
     private PinDetailsViewModel pinDetailsViewModel;
     private TagsAdapter tagsAdapter;
     private long pinId;
+    private boolean isPhoto;
 
     private SimpleExoPlayer simpleExoPlayer;
     private boolean shouldPlayWhenReady;
@@ -80,6 +88,13 @@ public class PinDetailsFragment extends Fragment {
 
         if (getArguments() != null) {
             pinId = getArguments().getLong(ARG_PIN_ID);
+            isPhoto = getArguments().getBoolean(ARG_PIN_IS_PHOTO);
+        }
+
+        if (isPhoto) {
+            postponeEnterTransition();
+            setSharedElementEnterTransition(TransitionInflater.from(getContext())
+                    .inflateTransition(android.R.transition.move));
         }
     }
 
@@ -88,6 +103,10 @@ public class PinDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment and get an instance of the binding class.
         binding = FragmentPinDetailsBinding.inflate(inflater, container, false);
+
+        // Set the string value of the pin ID as the unique transition name
+        // for the image view that will be used in the shared element transition.
+        ViewCompat.setTransitionName(binding.pinDetailsPhoto, String.valueOf(pinId));
         return binding.getRoot();
     }
 
@@ -135,18 +154,51 @@ public class PinDetailsFragment extends Fragment {
                 binding.setPin(pin);
                 pinDetailsViewModel.setFavorite(pin.isFavorite());
                 if(pin.getPhotoUri() != null && !pin.getPhotoUri().isEmpty()) {
-                    binding.pinDetailsPhoto.setImageURI(Uri.parse(pin.getPhotoUri()));
+                    loadPhoto(Uri.parse(pin.getPhotoUri()));
                 }
                 else if(pin.getVideoUri() != null && !pin.getVideoUri().isEmpty()) {
-                    initializePlayer(Uri.parse(pin.getVideoUri()));
+                    initPlayer(Uri.parse(pin.getVideoUri()));
                 }
 
+                // Binding needs to be executed immediately.
                 binding.executePendingBindings();
             }
         });
     }
 
-    private void initializePlayer(Uri videoUri) {
+    private void loadPhoto(Uri photoUri) {
+        GlideApp.with(this)
+                // Calling GlideApp.with() returns a RequestBuilder.
+                // By default you get a Drawable RequestBuilder, but
+                // you can change the requested type using as... methods.
+                // For example, asBitmap() returns a Bitmap RequestBuilder.
+                .asBitmap()
+                .load(photoUri)
+                // Tell Glide not to use its standard crossfade animation.
+                .dontAnimate()
+                // Display a placeholder until the image is loaded and processed.
+                .placeholder(R.color.placeholder)
+                // Keep track of errors and successful image loading.
+                .listener(new RequestListener<Bitmap>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                Target<Bitmap> target, boolean isFirstResource) {
+                        startPostponedEnterTransition();
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target,
+                                                   com.bumptech.glide.load.DataSource dataSource,
+                                                   boolean isFirstResource) {
+                        startPostponedEnterTransition();
+                        return false;
+                    }
+                })
+                .into(binding.pinDetailsPhoto);
+    }
+
+    private void initPlayer(Uri videoUri) {
         // See: https://exoplayer.dev/hello-world
         if (simpleExoPlayer == null) {
             // Create the player using the ExoPlayerFactory.

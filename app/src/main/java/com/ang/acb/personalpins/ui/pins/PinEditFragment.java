@@ -43,11 +43,11 @@ import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 
-import static com.ang.acb.personalpins.ui.pins.PinsFragment.ARG_PIN_IS_VIDEO;
-import static com.ang.acb.personalpins.ui.pins.PinsFragment.ARG_PIN_URI;
 
 public class PinEditFragment extends Fragment {
 
+    public static final String ARG_PIN_URI = "ARG_PIN_URI";
+    public static final String ARG_PIN_IS_VIDEO = "ARG_PIN_IS_VIDEO";
     private static final String CURRENT_PLAYBACK_POSITION_KEY = "CURRENT_PLAYBACK_POSITION_KEY";
     private static final String SHOULD_PLAY_WHEN_READY_KEY = "SHOULD_PLAY_WHEN_READY_KEY";
 

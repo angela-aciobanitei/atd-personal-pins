@@ -34,6 +34,9 @@
             <argument
                 android:name="pinId"
                 app:argType="long" />
+            <argument
+                android:name="isPhoto"
+                app:argType="boolean" />
         </action>
         <!-- Navigate from board details to pin select (and back/up) -->
         <action
@@ -88,6 +91,9 @@
             <argument
                 android:name="pinId"
                 app:argType="long" />
+            <argument
+                android:name="isPhoto"
+                app:argType="boolean" />
         </action>
     </fragment>
 
@@ -129,6 +135,9 @@
             <argument
                 android:name="pinId"
                 app:argType="long" />
+            <argument
+                android:name="isPhoto"
+                app:argType="boolean" />
         </action>
     </fragment>
 

@@ -28,8 +28,8 @@ import java.io.IOException;
 import timber.log.Timber;
 
 import static android.app.Activity.RESULT_OK;
-import static com.ang.acb.personalpins.ui.pins.PinsFragment.ARG_PIN_IS_VIDEO;
-import static com.ang.acb.personalpins.ui.pins.PinsFragment.ARG_PIN_URI;
+import static com.ang.acb.personalpins.ui.pins.PinEditFragment.ARG_PIN_IS_VIDEO;
+import static com.ang.acb.personalpins.ui.pins.PinEditFragment.ARG_PIN_URI;
 
 
 public class CreatePinDialog extends DialogFragment {
